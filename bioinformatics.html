@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BIOINFORMATICS | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, #101b20 0%, #0a0a0a 58%);
+      color: #f7f4eb;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      overflow-x: hidden;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    .track {
+      color: #7be8f6;
+      font-size: 13px;
+      letter-spacing: 4px;
+      margin-bottom: 25px;
+      text-shadow:
+        0 0 6px #7be8f6,
+        0 0 18px rgba(123, 232, 246, 0.65);
+    }
+
+    h1 {
+      font-size: clamp(35px, 8vw, 65px);
+      margin-bottom: 20px;
+      text-shadow:
+        0 0 8px rgba(123, 232, 246, 0.4),
+        0 0 25px rgba(123, 232, 246, 0.18);
+    }
+
+    .question {
+      color: #aaa;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      background: rgba(17, 17, 17, 0.9);
+      color: #f7f4eb;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    button:hover {
+      border-color: #7be8f6;
+      color: #7be8f6;
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 10px rgba(123, 232, 246, 0.35),
+        0 0 25px rgba(123, 232, 246, 0.12);
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+      min-height: 90px;
+    }
+
+    .correct {
+      color: #7be8f6;
+      text-shadow:
+        0 0 8px #7be8f6,
+        0 0 20px rgba(123, 232, 246, 0.7);
+    }
+
+    .wrong {
+      color: #ff5a2a;
+      text-shadow:
+        0 0 8px #ff5a2a,
+        0 0 20px rgba(255, 90, 42, 0.6);
+    }
+
+    .clue {
+      margin-top: 15px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #ff5a2a;
+      letter-spacing: 4px;
+      text-shadow:
+        0 0 8px #ff5a2a,
+        0 0 18px #ff5a2a,
+        0 0 35px rgba(255, 90, 42, 0.8);
+      animation: clueGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    .spark-container {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spark {
+      width: 190px;
+      max-width: 52vw;
+      height: auto;
+      display: block;
+      filter:
+        drop-shadow(0 0 5px #7be8f6)
+        drop-shadow(0 0 15px rgba(123, 232, 246, 0.8))
+        drop-shadow(0 0 35px rgba(123, 232, 246, 0.4));
+      transition: 0.35s ease;
+    }
+
+    .spark.happy {
+      animation: happySpark 0.7s ease-in-out 2;
+      filter:
+        drop-shadow(0 0 8px #7be8f6)
+        drop-shadow(0 0 22px #7be8f6)
+        drop-shadow(0 0 45px rgba(123, 232, 246, 0.95));
+    }
+
+    .spark.sad {
+      animation: sadSpark 0.55s ease-in-out 2;
+      filter:
+        drop-shadow(0 0 8px #ff5a2a)
+        drop-shadow(0 0 22px #ff5a2a)
+        drop-shadow(0 0 40px rgba(255, 90, 42, 0.8));
+    }
+
+    #dnaCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    @keyframes happySpark {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+
+      30% {
+        transform: translateY(-18px) rotate(-5deg) scale(1.06);
+      }
+
+      60% {
+        transform: translateY(-9px) rotate(5deg) scale(1.03);
+      }
+    }
+
+    @keyframes sadSpark {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateY(4px) rotate(-5deg);
+      }
+
+      50% {
+        transform: translateY(9px) rotate(5deg);
+      }
+
+      75% {
+        transform: translateY(4px) rotate(-3deg);
+      }
+    }
+
+    @keyframes clueGlow {
+      from {
+        text-shadow:
+          0 0 6px #ff5a2a,
+          0 0 15px rgba(255, 90, 42, 0.6);
+      }
+
+      to {
+        text-shadow:
+          0 0 12px #ff5a2a,
+          0 0 28px #ff5a2a,
+          0 0 45px rgba(255, 90, 42, 0.9);
+      }
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 20px;
+      }
+
+      .track {
+        font-size: 11px;
+        letter-spacing: 2px;
+      }
+
+      .question {
+        font-size: 16px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 16px;
+      }
+
+      .spark {
+        width: 165px;
+        max-width: 60vw;
+      }
+
+      .clue {
+        font-size: 27px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <canvas id="dnaCanvas"></canvas>
+
+  <div class="box">
+
+    <div class="track">TRACK 04 / BIOINFORMATICS</div>
+
+    <h1>READ THE CODE</h1>
+
+    <div class="question">
+      Which four bases are found in DNA?
+    </div>
+
+    <div class="options">
+
+      <button onclick="checkAnswer(this, true)">
+        A, T, G, C
+      </button>
+
+      <button onclick="checkAnswer(this, false)">
+        A, U, G, C
+      </button>
+
+      <button onclick="checkAnswer(this, false)">
+        A, T, U, C
+      </button>
+
+      <button onclick="checkAnswer(this, false)">
+        G, U, C, T
+      </button>
+
+    </div>
+
+    <div id="result"></div>
+
+    <div class="spark-container">
+      <img
+        id="spark"
+        class="spark"
+        src="assets/1001830636.png"
+        alt="Spark character"
+      >
+    </div>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById("dnaCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let dnaColor = "#7BE8F6";
+    let dnaGlow = "#7BE8F6";
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function drawDNA(time) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const centerX = canvas.width / 2;
+      const dnaWidth = Math.min(canvas.width * 0.72, 560);
+      const startX = centerX - dnaWidth / 2;
+      const amplitude = 75;
+      const spacing = 27;
+      const rows = Math.ceil(canvas.height / spacing) + 4;
+
+      ctx.lineWidth = 2.2;
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = dnaGlow;
+
+      for (let i = 0; i < rows; i++) {
+        const y = i * spacing - 20;
+        const wave = (time * 0.0015) + i * 0.18;
+
+        const x1 = startX + Math.sin(wave) * amplitude;
+        const x2 = startX + dnaWidth + Math.sin(wave + Math.PI) * amplitude;
+
+        const baseNames = ["A", "T", "G", "C"];
+        const base = baseNames[i % baseNames.length];
+
+        ctx.strokeStyle = dnaColor;
+        ctx.globalAlpha = 0.55;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y);
+        ctx.lineTo(x2, y);
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.9;
+
+        ctx.fillStyle = dnaColor;
+
+        ctx.beginPath();
+        ctx.arc(x1, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x2, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = "bold 13px Arial";
+        ctx.textAlign = "center";
+
+        ctx.fillStyle = dnaColor;
+        ctx.fillText(base, (x1 + x2) / 2 - 13, y - 5);
+
+        const pair = {
+          A: "T",
+          T: "A",
+          G: "C",
+          C: "G"
+        };
+
+        ctx.fillText(pair[base], (x1 + x2) / 2 + 13, y + 15);
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(drawDNA);
+    }
+
+    requestAnimationFrame(drawDNA);
+
+    function checkAnswer(button, correct) {
+      const result = document.getElementById("result");
+      const spark = document.getElementById("spark");
+
+      spark.classList.remove("happy", "sad");
+
+      if (correct) {
+        result.innerHTML = `
+          <div class="correct">CORRECT.</div>
+          <div>YOUR CLUE IS:</div>
+          <div class="clue">TOGETHER</div><div class="token-box" id="finalTokenBox"></div>
+        `;
+
+        dnaColor = "#7BE8F6";
+        dnaGlow = "#7BE8F6";
+
+        document.querySelectorAll("button").forEach(btn => {
+          btn.disabled = true;
+        });
+
+        void spark.offsetWidth;
+        spark.classList.add("happy");
+        revealSparkFinalToken("bioinformatics");
+
+      } else {
+        result.innerHTML = `
+          <div class="wrong">NOT THIS ONE.</div>
+          <div>TRY AGAIN.</div>
+        `;
+
+        dnaColor = "#FF5A2A";
+        dnaGlow = "#FF5A2A";
+
+        void spark.offsetWidth;
+        spark.classList.add("sad");
+      }
+    }
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+  </html>

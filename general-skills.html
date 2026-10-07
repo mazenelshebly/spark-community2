@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GENERAL SKILLS | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #24113f 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #102f45 0%, transparent 35%),
+        #0A0A0A;
+      color: #F7F4EB;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 850px;
+      text-align: center;
+    }
+
+    .track {
+      color: #7BE8F6;
+      font-size: 13px;
+      letter-spacing: 4px;
+      margin-bottom: 18px;
+    }
+
+    .top-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 35px;
+      margin-bottom: 25px;
+    }
+
+    .spark {
+      width: 190px;
+      max-width: 35%;
+      filter: drop-shadow(0 0 20px rgba(180, 100, 255, 0.3));
+    }
+
+    .intro {
+      flex: 1;
+      text-align: left;
+    }
+
+    h1 {
+      font-size: clamp(35px, 8vw, 65px);
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    .sentence {
+      font-size: clamp(20px, 4vw, 28px);
+      line-height: 1.5;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: #C084FC;
+      font-weight: bold;
+    }
+
+    .progress-area {
+      margin: 25px 0;
+    }
+
+    .progress-text {
+      color: #aaa;
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #222;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #8B5CF6, #F472D0, #7BE8F6);
+      transition: width 0.4s ease;
+    }
+
+    .stage-label {
+      color: #F472D0;
+      font-size: 13px;
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(25px, 5vw, 40px);
+      margin-bottom: 15px;
+    }
+
+    .question {
+      color: #aaa;
+      font-size: clamp(18px, 4vw, 24px);
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      background: #111;
+      color: #F7F4EB;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: #C084FC;
+      background: #1d1230;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      line-height: 1.6;
+      min-height: 55px;
+    }
+
+    .correct {
+      color: #7BE8F6;
+    }
+
+    .wrong {
+      color: #FF5A2A;
+    }
+
+    .clue {
+      margin-top: 15px;
+      font-size: clamp(30px, 7vw, 48px);
+      font-weight: bold;
+      color: #F472D0;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px rgba(244, 114, 208, 0.5);
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      background: linear-gradient(90deg, #8B5CF6, #C026D3);
+      border: none;
+      font-weight: bold;
+      display: none;
+    }
+
+    .next-btn:hover {
+      background: linear-gradient(90deg, #A78BFA, #E879F9);
+    }
+
+    .final-screen {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .final-screen h2 {
+      color: #C084FC;
+      margin-bottom: 20px;
+    }
+
+    .final-message {
+      color: #aaa;
+      font-size: 20px;
+      line-height: 1.7;
+    }
+
+    .restart-btn {
+      margin-top: 25px;
+      background: #111;
+      border-color: #7BE8F6;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 650px) {
+      .top-layout {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .spark {
+        max-width: 210px;
+        width: 210px;
+      }
+
+      .intro {
+        text-align: center;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <div class="box">
+
+    <div class="track">TRACK 09 / GENERAL SKILLS</div>
+
+    <div class="top-layout">
+
+      <img
+        class="spark"
+        src="assets/general-skills-spark.png"
+        alt="General Skills Spark"
+      >
+
+      <div class="intro">
+
+        <h1>UNLOCK YOUR POTENTIAL</h1>
+
+        <div class="sentence">
+          BUILD THE SKILLS THAT HELP YOU
+          <span class="highlight">GROW</span>.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="progress-area">
+
+      <div class="progress-text" id="progressText">
+        SKILL PROGRESS: 0 / 4
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+    </div>
+
+    <div id="quizScreen">
+
+      <div class="stage-label" id="stageLabel">
+        SKILL 01 / COMMUNICATION
+      </div>
+
+      <h2 id="questionTitle">
+        COMMUNICATION
+      </h2>
+
+      <div class="question" id="questionText">
+        What makes communication effective?
+      </div>
+
+      <div class="options" id="optionsContainer"></div>
+
+      <div id="result"></div>
+
+      <button class="next-btn" id="nextButton" onclick="nextStage()">
+        NEXT SKILL →
+      </button>
+
+    </div>
+
+    <div class="final-screen" id="finalScreen">
+
+      <h2>ALL SKILLS UNLOCKED</h2>
+
+      <div class="final-message">
+        You completed every challenge.<br>
+        Keep learning. Keep practicing.<br>
+        Keep growing.
+      </div>
+
+      <div class="clue">GROW</div>
+
+      <div class="token-box" id="finalTokenBox"></div>
+
+      <button class="restart-btn" onclick="restartTrack()">
+        PLAY AGAIN ↻
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+    const stages = [
+      {
+        label: "SKILL 01 / COMMUNICATION",
+        title: "COMMUNICATION",
+        question: "What makes communication effective?",
+        options: [
+          ["Speaking loudly", false],
+          ["Listening and expressing ideas clearly", true],
+          ["Talking without stopping", false],
+          ["Using complicated words", false]
+        ]
+      },
+      {
+        label: "SKILL 02 / TIME MANAGEMENT",
+        title: "TIME MANAGEMENT",
+        question: "What should you do first when you have many tasks?",
+        options: [
+          ["Do everything randomly", false],
+          ["Wait until the last minute", false],
+          ["Ignore difficult tasks", false],
+          ["Prioritize important tasks", true]
+        ]
+      },
+      {
+        label: "SKILL 03 / PROBLEM SOLVING",
+        title: "PROBLEM SOLVING",
+        question: "What is the best first step when facing a problem?",
+        options: [
+          ["Panic", false],
+          ["Blame someone", false],
+          ["Understand the problem", true],
+          ["Give up", false]
+        ]
+      },
+      {
+        label: "SKILL 04 / TEAMWORK",
+        title: "TEAMWORK & LEADERSHIP",
+        question: "What makes a team stronger?",
+        options: [
+          ["One person does everything", false],
+          ["Competition between teammates", false],
+          ["Ignoring others", false],
+          ["Trust and collaboration", true]
+        ]
+      }
+    ];
+
+    let currentStage = 0;
+    let completedStages = 0;
+    let stageAnswered = false;
+
+    const stageLabel = document.getElementById("stageLabel");
+    const questionTitle = document.getElementById("questionTitle");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const result = document.getElementById("result");
+    const nextButton = document.getElementById("nextButton");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const quizScreen = document.getElementById("quizScreen");
+    const finalScreen = document.getElementById("finalScreen");
+
+    function loadStage() {
+
+      const stage = stages[currentStage];
+
+      stageAnswered = false;
+
+      stageLabel.textContent = stage.label;
+      questionTitle.textContent = stage.title;
+      questionText.textContent = stage.question;
+
+      result.innerHTML = "";
+      nextButton.style.display = "none";
+
+      optionsContainer.innerHTML = "";
+
+      stage.options.forEach(option => {
+
+        const button = document.createElement("button");
+
+        button.textContent = option[0];
+
+        button.onclick = function() {
+          checkAnswer(button, option[1]);
+        };
+
+        optionsContainer.appendChild(button);
+
+      });
+
+      updateProgress();
+
+    }
+
+    function checkAnswer(button, correct) {
+
+      if (stageAnswered) {
+        return;
+      }
+
+      if (correct) {
+
+        stageAnswered = true;
+        completedStages++;
+
+        result.innerHTML = `
+          <div class="correct">CORRECT. SKILL UNLOCKED ✓</div>
+          <div>YOU ARE READY FOR THE NEXT CHALLENGE.</div>
+        `;
+
+        document.querySelectorAll("#optionsContainer button").forEach(btn => {
+          btn.disabled = true;
+        });
+
+        if (currentStage === stages.length - 1) {
+          nextButton.textContent = "REVEAL FINAL CLUE →";
+        } else {
+          nextButton.textContent = "NEXT SKILL →";
+        }
+
+        nextButton.style.display = "block";
+
+        updateProgress();
+
+      } else {
+
+        result.innerHTML = `
+          <div class="wrong">NOT THIS ONE.</div>
+          <div>TRY AGAIN.</div>
+        `;
+
+        button.style.borderColor = "#FF5A2A";
+
+      }
+
+    }
+
+    function nextStage() {
+
+      if (!stageAnswered) {
+        return;
+      }
+
+      if (currentStage === stages.length - 1) {
+
+        quizScreen.style.display = "none";
+        finalScreen.style.display = "block";
+        revealSparkFinalToken("general-skills");
+
+        progressText.textContent = "SKILL PROGRESS: 4 / 4";
+        progressFill.style.width = "100%";
+
+        return;
+      }
+
+      currentStage++;
+      loadStage();
+
+    }
+
+    function updateProgress() {
+
+      progressText.textContent =
+        `SKILL PROGRESS: ${completedStages} / ${stages.length}`;
+
+      progressFill.style.width =
+        `${(completedStages / stages.length) * 100}%`;
+
+    }
+
+    function restartTrack() {
+
+      currentStage = 0;
+      completedStages = 0;
+      stageAnswered = false;
+
+      quizScreen.style.display = "block";
+      finalScreen.style.display = "none";
+
+      loadStage();
+
+    }
+
+    loadStage();
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+  </html>

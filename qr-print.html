@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPARK — QR Challenge Board</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#050A12;
+  color:#F5FAFF;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  margin:auto;
+  padding:10mm;
+}
+
+header{
+  text-align:center;
+  margin-bottom:7mm;
+}
+
+h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:3px;
+}
+
+.subtitle{
+  margin-top:7px;
+  color:#9BAEC2;
+  font-size:12px;
+}
+
+.board{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:6mm;
+}
+
+.card{
+  background:#081525;
+  border:1px solid rgba(141,219,255,.16);
+  border-radius:12px;
+  padding:5mm;
+  min-height:78mm;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.track-number{
+  color:#55B7FF;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+.track-name{
+  margin-top:4px;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.7px;
+}
+
+.track-qr{
+  background:#fff;
+  padding:7px;
+  margin:4mm 0 3mm;
+  border-radius:5px;
+}
+
+.track-qr canvas,
+.track-qr img{
+  display:block;
+}
+
+.instruction{
+  color:#9BAEC2;
+  font-size:9px;
+  line-height:1.45;
+}
+
+.final-piece{
+  width:100%;
+  margin-top:4mm;
+  padding-top:3mm;
+  border-top:1px dashed rgba(141,219,255,.25);
+}
+
+.final-label{
+  color:#8DDBFF;
+  font-size:9px;
+  font-weight:bold;
+  letter-spacing:1.2px;
+  margin-bottom:2mm;
+}
+
+.piece{
+  width:34mm;
+  height:34mm;
+  background:#fff;
+  border:2px dashed #1687FF;
+  margin:auto;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.piece canvas{
+  display:block;
+  width:100% !important;
+  height:100% !important;
+  image-rendering:pixelated;
+}
+
+.no-final{
+  margin-top:auto;
+  padding-top:5mm;
+  color:#66798d;
+  font-size:8px;
+  letter-spacing:.5px;
+}
+
+.print-button{
+  display:block;
+  margin:12px auto;
+  padding:12px 24px;
+  border:0;
+  border-radius:8px;
+  background:#1687FF;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+@media print{
+
+  body{
+    background:white;
+  }
+
+  .page{
+    margin:0;
+  }
+
+  .print-button{
+    display:none;
+  }
+
+  .card{
+    break-inside:avoid;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<button class="print-button" onclick="window.print()">
+PRINT / SAVE PDF
+</button>
+
+<div class="page">
+
+<header>
+  <h1>SPARK</h1>
+
+  <div class="subtitle">
+    8 Tracks · 8 Challenges · 8 Final Tokens · 1 Final Unlock
+  </div>
+</header>
+
+<div class="board" id="board"></div>
+
+</div>
+
+
+<script>
+const BASE_URL="https://mazenelshebly.github.io/spark-community/";
+const tracks=[
+{id:"web",name:"WEB DEVELOPMENT",file:"web.html",final:true},
+{id:"data",name:"DATA ANALYSIS",file:"data.html",final:true},
+{id:"cyber",name:"CYBER SECURITY",file:"cyber.html",final:true},
+{id:"bioinformatics",name:"BIOINFORMATICS",file:"bioinformatics.html",final:true},
+{id:"marketing",name:"MARKETING",file:"marketing.html",final:false},
+{id:"hr",name:"HUMAN RESOURCES",file:"hr.html",final:true},
+{id:"logistics",name:"LOGISTICS",file:"logistics.html",final:true},
+{id:"general-skills",name:"GENERAL SKILLS",file:"general-skills.html",final:false}
+];
+const board=document.getElementById("board");
+tracks.forEach((track,index)=>{
+ const card=document.createElement("div"); card.className="card";
+ card.innerHTML=`<div class="track-number">TRACK ${String(index+1).padStart(2,"0")}</div><div class="track-name">${track.name}</div><div class="track-qr" id="qr-${track.id}"></div><div class="instruction">SCAN THIS QR<br>OPEN THE CHALLENGE<br>SOLVE IT</div>${track.final?`<div class="final-piece"><div class="final-label">FINAL TOKEN TRACK</div><div class="no-final">SOLVE THE CHALLENGE<br>GET YOUR UNIQUE TOKEN</div></div>`:`<div class="no-final">CHALLENGE ONLY<br>NOT PART OF FINAL</div>`}`;
+ board.appendChild(card);
+ new QRCode(document.getElementById(`qr-${track.id}`),{text:BASE_URL+track.file,width:145,height:145,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+});
+const finalCard=document.createElement("div");
+finalCard.className="card";
+finalCard.innerHTML=`<div class="track-number">FINAL</div><div class="track-name">FINAL UNLOCK</div><div class="track-qr" id="qr-final"></div><div class="instruction">OPEN AFTER ALL 8 FINAL TOKENS<br>ARE COLLECTED<br>VERIFY YOUR TEAM</div><div class="no-final">6 UNIQUE TOKENS<br>→ FINAL QR</div>`;
+board.appendChild(finalCard);
+new QRCode(document.getElementById("qr-final"),{text:BASE_URL+"final-unlock.html",width:145,height:145,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+</script>
+</body>
+</html>

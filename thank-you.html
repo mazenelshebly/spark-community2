@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Thank You | BCU</title>
+
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+/* =========================
+   ROOT
+========================= */
+
+:root {
+
+    --black: #050A12;
+    --blue: #1687FF;
+    --blue-light: #55B7FF;
+    --cyan: #8DDBFF;
+    --white: #F5FAFF;
+    --muted: #9BAEC2;
+    --line: rgba(141,219,255,.16);
+
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+html,
+body {
+
+    width: 100%;
+    min-height: 100%;
+
+    background: var(--black);
+    color: var(--white);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    overflow-x: hidden;
+
+    background:
+
+        radial-gradient(
+
+            circle at 50% 40%,
+
+            rgba(22,135,255,.14),
+
+            transparent 55%
+
+        ),
+
+        var(--black);
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+
+    width: 100%;
+    max-width: 850px;
+
+    padding: 40px 25px;
+
+    animation: fadeIn 1.2s ease forwards;
+
+}
+
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(25px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* =========================
+   SMALL TITLE
+========================= */
+
+.smallTitle {
+
+    color: var(--blue-light);
+
+    font-size: 12px;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* =========================
+   THANK YOU
+========================= */
+
+h1 {
+
+    font-size:
+        clamp(55px, 12vw, 140px);
+
+    line-height: .9;
+
+    font-weight: 900;
+
+    letter-spacing: -5px;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            var(--white),
+
+            var(--blue-light)
+
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.description {
+
+    margin-top: 25px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   REGISTRATION CARD
+========================= */
+
+.registrationCard {
+
+    width: 100%;
+
+    max-width: 480px;
+
+    margin: 45px auto 0;
+
+    padding: 30px 25px;
+
+    border: 1px solid var(--line);
+
+    background:
+
+        linear-gradient(
+
+            145deg,
+
+            rgba(22,135,255,.10),
+
+            rgba(8,21,37,.80)
+
+        );
+
+    box-shadow:
+
+        0 15px 60px rgba(0,0,0,.25);
+
+}
+
+
+/* =========================
+   NAME
+========================= */
+
+.nameLabel {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 10px;
+
+}
+
+
+#participantName {
+
+    color: var(--white);
+
+    font-size: clamp(24px, 5vw, 38px);
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+
+    height: 1px;
+
+    background: var(--line);
+
+    margin: 28px 0;
+
+}
+
+
+/* =========================
+   DATA ROWS
+========================= */
+
+.dataRow {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+
+.dataLabel {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.dataValue {
+
+    color: var(--blue-light);
+
+    font-size: clamp(25px, 6vw, 42px);
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* =========================
+   UNIQUE CODE
+========================= */
+
+.codeValue {
+
+    color: var(--white);
+
+    font-size: clamp(21px, 5vw, 34px);
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* =========================
+   FOOTER MESSAGE
+========================= */
+
+.bottomMessage {
+
+    margin-top: 35px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+#loading {
+
+    color: var(--blue-light);
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+#errorMessage {
+
+    display: none;
+
+    color: #FF8F8F;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+    margin-top: 30px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .container {
+
+        padding: 30px 18px;
+
+    }
+
+    h1 {
+
+        letter-spacing: -3px;
+
+    }
+
+    .registrationCard {
+
+        padding: 25px 18px;
+
+        margin-top: 35px;
+
+    }
+
+    .description {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+    .codeValue {
+
+        letter-spacing: 1px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     MAIN CONTAINER
+========================= -->
+
+<div class="container">
+
+
+    <div class="smallTitle">
+
+        BCU-Obour Branch
+
+    </div>
+
+
+    <h1>
+
+        THANK YOU
+
+    </h1>
+
+
+    <p class="description">
+
+        THANK YOU FOR BEING PART OF THE COMMUNITY.
+
+    </p>
+
+
+    <!-- LOADING -->
+
+    <div id="loading">
+
+        LOADING YOUR REGISTRATION...
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div id="errorMessage">
+
+        REGISTRATION DATA NOT FOUND.
+
+        <br>
+
+        PLEASE RETURN TO THE MAIN PAGE AND REGISTER AGAIN.
+
+    </div>
+
+
+    <!-- REGISTRATION CARD -->
+
+    <div
+
+        class="registrationCard"
+
+        id="registrationCard"
+
+        style="display: none;"
+
+    >
+
+
+        <!-- NAME -->
+
+        <div class="nameLabel">
+
+            WELCOME
+
+        </div>
+
+
+        <div id="participantName">
+
+            PARTICIPANT
+
+        </div>
+
+
+        <div class="divider"></div>
+
+
+        <!-- ENTRY NUMBER -->
+
+        <div class="dataRow">
+
+
+            <div class="dataLabel">
+
+                YOUR ENTRY NUMBER
+
+            </div>
+
+
+            <div
+
+                class="dataValue"
+
+                id="entryNumber"
+
+            >
+
+                001
+
+            </div>
+
+
+        </div>
+
+
+        <!-- UNIQUE CODE -->
+
+        <div class="dataRow">
+
+
+            <div class="dataLabel">
+
+                YOUR CODE IS
+
+            </div>
+
+
+            <div
+
+                class="codeValue"
+
+                id="uniqueCode"
+
+            >
+
+                BCU-0001
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BOTTOM MESSAGE -->
+
+    <p
+
+        class="bottomMessage"
+
+        id="bottomMessage"
+
+        style="display: none;"
+
+    >
+
+        KEEP YOUR CODE.
+
+        <br>
+
+        THIS IS YOUR UNIQUE REGISTRATION ID.
+
+    </p>
+
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+
+/* =========================
+   STORAGE KEY
+========================= */
+
+const STORAGE_KEY =
+
+    "bcu_final_reveal_registration";
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const loading =
+
+    document.getElementById("loading");
+
+
+const errorMessage =
+
+    document.getElementById("errorMessage");
+
+
+const registrationCard =
+
+    document.getElementById("registrationCard");
+
+
+const bottomMessage =
+
+    document.getElementById("bottomMessage");
+
+
+const participantName =
+
+    document.getElementById("participantName");
+
+
+const entryNumber =
+
+    document.getElementById("entryNumber");
+
+
+const uniqueCode =
+
+    document.getElementById("uniqueCode");
+
+
+/* =========================
+   LOAD REGISTRATION
+========================= */
+
+function loadRegistration() {
+
+
+    const savedData =
+
+        localStorage.getItem(
+
+            STORAGE_KEY
+
+        );
+
+
+    /* =========================
+       CHECK DATA
+    ========================= */
+
+    if (!savedData) {
+
+
+        showError();
+
+
+        return;
+
+
+    }
+
+
+    try {
+
+
+        const registration =
+
+            JSON.parse(
+
+                savedData
+
+            );
+
+
+        /* =========================
+           VALIDATE DATA
+        ========================= */
+
+        if (
+
+            !registration ||
+
+            !registration.name ||
+
+            registration.entry_number === undefined ||
+
+            !registration.unique_code
+
+        ) {
+
+
+            showError();
+
+
+            return;
+
+
+        }
+
+
+        /* =========================
+           DISPLAY NAME
+        ========================= */
+
+        participantName.textContent =
+
+            registration.name;
+
+
+        /* =========================
+           DISPLAY ENTRY NUMBER
+        ========================= */
+
+        entryNumber.textContent =
+
+            Number(
+
+                registration.entry_number
+
+            )
+
+                .toString()
+
+                .padStart(3, "0");
+
+
+        /* =========================
+           DISPLAY UNIQUE CODE
+        ========================= */
+
+        uniqueCode.textContent =
+
+            registration.unique_code;
+
+
+        /* =========================
+           SHOW CONTENT
+        ========================= */
+
+        loading.style.display =
+
+            "none";
+
+
+        registrationCard.style.display =
+
+            "block";
+
+
+        bottomMessage.style.display =
+
+            "block";
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+
+            "Registration data error:",
+
+            error
+
+        );
+
+
+        showError();
+
+
+    }
+
+
+}
+
+
+/* =========================
+   SHOW ERROR
+========================= */
+
+function showError() {
+
+
+    loading.style.display =
+
+        "none";
+
+
+    registrationCard.style.display =
+
+        "none";
+
+
+    bottomMessage.style.display =
+
+        "none";
+
+
+    errorMessage.style.display =
+
+        "block";
+
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadRegistration();
+
+
+</script>
+
+
+</body>
+
+</html>

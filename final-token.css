@@ -1,0 +1,2 @@
+.token-box{margin:24px auto 0;max-width:560px;padding:22px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.035);text-align:center;backdrop-filter:blur(8px)}
+.token-label{font-size:12px;letter-spacing:3px;opacity:.7;margin-bottom:10px}.token-value{font-family:monospace;font-size:clamp(24px,5vw,42px);font-weight:800;letter-spacing:5px;margin:8px 0 12px;user-select:all}.token-warning{font-size:11px;letter-spacing:1.5px;opacity:.55}.token-loading,.token-error{font-size:13px;letter-spacing:2px}.token-error{color:#ff6b5f}

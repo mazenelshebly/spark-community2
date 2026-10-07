@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCU-Obour Branch | Final Reveal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#050A12; --deep:#081525; --blue:#1687FF; --blue-light:#55B7FF; --cyan:#8DDBFF;
+  --white:#F5FAFF; --muted:#9BAEC2; --line:rgba(141,219,255,.14);
+  --display:"Space Grotesk","Segoe UI",Arial,sans-serif; --body:"Manrope","Segoe UI",Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:700}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.section{padding:110px 7%}
+
+/* INTRO */
+#videoIntro{position:relative;width:100%;height:100svh;background:#000;overflow:hidden}
+#openingImage{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.videoOverlay{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(2,8,18,.08),transparent 45%,rgba(5,10,18,.55) 80%,var(--black))}
+#explore{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:10;cursor:pointer;
+  display:flex;align-items:center;gap:12px;padding:12px 22px;border-radius:99px;
+  background:rgba(8,21,37,.55);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:.3s ease}
+#explore:hover{border-color:var(--blue-light);background:rgba(22,135,255,.25)}
+.exploreText{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.arrow{color:var(--blue-light);font-size:18px;animation:bounce 1.4s infinite}
+@keyframes bounce{50%{transform:translateY(5px)}}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 7%;background:rgba(5,10,18,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.brand{font:700 15px var(--display);letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+.brand i{width:9px;height:9px;border-radius:50%;background:var(--blue-light);box-shadow:0 0 14px var(--blue-light)}
+.nav a.cta{font-size:13px;font-weight:800;color:var(--white);text-decoration:none;padding:9px 18px;border-radius:99px;
+  border:1px solid var(--blue-light);transition:.3s ease}
+.nav a.cta:hover{background:var(--blue-light);color:var(--black)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;padding-bottom:60px}
+.hero::before,.hero::after{content:"";position:absolute;width:55vw;height:55vw;border-radius:50%;filter:blur(90px);opacity:.35;z-index:0;animation:drift 14s ease-in-out infinite alternate}
+.hero::before{background:#1687FF;top:-20vw;left:-12vw}
+.hero::after{background:#8a3dff;bottom:-24vw;right:-14vw;animation-delay:-7s}
+@keyframes drift{to{transform:translate(8vw,5vw) scale(1.15)}}
+.grid{position:absolute;inset:0;z-index:0;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000,transparent 70%);mask-image:radial-gradient(ellipse at 50% 40%,#000,transparent 70%)}
+.heroInner{position:relative;z-index:2;max-width:1000px}
+.smallTitle{display:inline-block;font-size:13px;font-weight:800;color:var(--cyan);padding:8px 18px;margin-bottom:28px;
+  border:1px solid var(--line);border-radius:99px;background:rgba(22,135,255,.1)}
+.hero h1{font-size:clamp(46px,9vw,118px);line-height:.95;letter-spacing:-3px}
+.hero h1 span{display:block;background:linear-gradient(90deg,var(--blue),var(--cyan) 50%,#b57bff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{margin:26px auto 0;max-width:460px;font-size:18px;line-height:1.6;color:var(--muted);font-weight:600}
+
+/* SQUAD (the one orchestrated entrance) */
+.squad{position:relative;z-index:2;display:flex;justify-content:center;align-items:flex-end;margin-top:54px;padding:0 4%}
+.squad img{height:clamp(120px,17vw,235px);width:auto;margin:0 -1.2vw;cursor:pointer;
+  filter:drop-shadow(0 14px 22px rgba(var(--rgb),.55));
+  opacity:0;animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards,float 5s ease-in-out infinite;
+  animation-delay:calc(var(--i)*.09s),calc(.9s + var(--i)*.09s);transition:transform .35s ease,filter .35s ease}
+.squad img:nth-child(even){margin-bottom:-12px}
+.squad img:hover{transform:translateY(-12px) scale(1.08);filter:drop-shadow(0 18px 30px rgba(var(--rgb),.95));z-index:3;animation-play-state:paused}
+@keyframes rise{from{opacity:0;transform:translateY(60px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes float{50%{translate:0 -9px}}
+
+/* MESSAGE */
+.message{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(circle at 50% 50%,rgba(22,135,255,.12),transparent 55%)}
+.message h2{max-width:1000px;font-size:clamp(36px,6.5vw,86px);line-height:1.02;letter-spacing:-2px}
+.message h2 span{color:var(--blue-light)}
+
+/* TRACKS */
+.tracksHeader{margin-bottom:48px;max-width:640px}
+.tracksHeader h2{font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-2px}
+.tracksHeader p{margin-top:16px;color:var(--muted);font-size:18px}
+.trackGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.track{position:relative;isolation:isolate;overflow:hidden;min-height:330px;padding:22px;border-radius:24px;
+  border:1px solid rgba(var(--rgb),.22);background:linear-gradient(165deg,rgba(var(--rgb),.13),rgba(8,21,37,.94) 62%);
+  display:flex;flex-direction:column;justify-content:flex-end;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+.track::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.55;transition:opacity .35s ease;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,38%),rgba(var(--rgb),.38),transparent 52%)}
+.track:hover{transform:translateY(-6px);border-color:rgba(var(--rgb),.85);box-shadow:0 22px 50px rgba(var(--rgb),.22)}
+.track:hover::before{opacity:1}
+.trackNumber{display:none}
+.mascot{flex:1;display:flex;align-items:center;justify-content:center;padding-bottom:14px}
+.mascot img{max-height:215px;max-width:100%;width:auto;filter:drop-shadow(0 14px 22px rgba(var(--rgb),.5));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.track:hover .mascot img{transform:translateY(-8px) scale(1.07) rotate(-2deg)}
+.trackName{font:700 21px/1.1 var(--display);letter-spacing:-.3px;padding-top:14px;border-top:2px solid rgba(var(--rgb),.7)}
+
+/* AWAITS */
+.awaits{background:var(--deep);border-block:1px solid var(--line)}
+.awaits h2{font-size:clamp(40px,6vw,76px);letter-spacing:-2px;margin-bottom:56px}
+.awaitsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.awaitsItem{padding:26px;border-radius:20px;background:rgba(22,135,255,.06);border:1px solid var(--line);transition:.3s ease}
+.awaitsItem:hover{border-color:var(--blue-light);background:rgba(22,135,255,.14);transform:translateY(-4px)}
+.awaitsItem h3{color:var(--blue-light);font-size:22px;margin-bottom:12px}
+.awaitsItem p{color:var(--muted);line-height:1.65}
+
+/* JOIN */
+.join{position:relative;overflow:hidden;text-align:center;background:radial-gradient(circle at 50% 30%,rgba(85,183,255,.2),transparent 50%),#07111F}
+.join h2{font-size:clamp(60px,13vw,170px);line-height:.85;letter-spacing:-5px;margin-bottom:6px;
+  background:linear-gradient(90deg,var(--white),var(--blue-light));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.join p{margin:30px auto 36px;max-width:520px;line-height:1.65;color:var(--muted);font-size:18px}
+.joinButton{display:inline-block;padding:18px 40px;border-radius:99px;background:var(--blue);color:#fff;text-decoration:none;
+  font-weight:800;letter-spacing:1.5px;box-shadow:0 0 0 0 rgba(22,135,255,.6);animation:pulse 2.4s infinite;transition:.3s ease}
+.joinButton:hover{background:var(--blue-light);color:var(--black);transform:translateY(-3px)}
+@keyframes pulse{70%{box-shadow:0 0 0 18px rgba(22,135,255,0)}100%{box-shadow:0 0 0 0 rgba(22,135,255,0)}}
+
+/* SOCIAL + FORM */
+.social{text-align:center}
+.social h2{font-size:clamp(38px,6vw,72px);letter-spacing:-2px;margin-bottom:40px}
+.socialLinks{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.socialLinks a{padding:15px 28px;border-radius:99px;border:1px solid var(--line);background:rgba(8,21,37,.7);
+  color:var(--white);text-decoration:none;font-weight:800;transition:.3s ease}
+.socialLinks a:hover{background:var(--blue);border-color:var(--blue-light);transform:translateY(-3px);box-shadow:0 10px 30px rgba(22,135,255,.25)}
+.nameForm{display:flex;align-items:center;width:min(100%,440px);margin:36px auto 0;border-radius:99px;overflow:hidden;
+  border:1px solid var(--line);background:rgba(8,21,37,.8);transition:.3s ease}
+.nameForm:focus-within{border-color:var(--blue-light);box-shadow:0 0 0 4px rgba(22,135,255,.18)}
+.nameForm input{flex:1;min-width:0;padding:17px 22px;background:transparent;border:none;outline:none;color:var(--white);
+  font:600 13px var(--body);letter-spacing:1px;text-transform:uppercase}
+.nameForm input::placeholder{color:var(--muted);opacity:.8}
+.nameForm button{width:60px;height:52px;border:none;background:var(--blue);color:#fff;font-size:22px;cursor:pointer;transition:.3s ease}
+.nameForm button:hover{background:var(--blue-light);color:var(--black)}
+
+footer{background:#03070D;padding:30px 7%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line)}
+footer p{color:var(--muted);font-size:12px}
+
+@media(max-width:900px){.trackGrid,.awaitsGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+  .section{padding:76px 6%}
+  .hero h1{letter-spacing:-2px}
+  .squad{flex-wrap:wrap;gap:6px 0}
+  .squad img{height:112px;margin:0 -4px}
+  .squad img:nth-child(even){margin-bottom:0}
+}
+@media(max-width:520px){
+  .trackGrid{gap:10px}
+  .track{min-height:250px;padding:14px;border-radius:18px}
+  .mascot img{max-height:140px}
+  .trackName{font-size:14px}
+  .awaitsGrid{grid-template-columns:1fr}
+  .socialLinks{flex-direction:column}.socialLinks a{width:100%}
+  .exploreText{font-size:11px;letter-spacing:1.5px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.squad img{opacity:1}}
+</style>
+</head>
+<body>
+
+<section id="videoIntro">
+  <img id="openingImage" src="assets/final-reveal.png" alt="BCU-Obour Branch">
+  <div class="videoOverlay"></div>
+  <div id="explore" role="button" tabindex="0">
+    <span class="exploreText">Explore the community</span>
+    <span class="arrow">↓</span>
+  </div>
+</section>
+
+<main id="website">
+
+<header class="nav">
+  <div class="brand"><i></i>BCU-Obour</div>
+  <a class="cta" href="#join">Join now</a>
+</header>
+
+<section class="hero section">
+  <div class="grid"></div>
+  <div class="heroInner">
+    <div class="smallTitle">BCU-Obour Branch</div>
+    <h1>8 TRACKS.<span>1 COMMUNITY.</span></h1>
+    <p>You found the final piece. Now discover what comes next.</p>
+  </div>
+  <div class="squad" aria-hidden="true">
+    <img style="--i:0;--rgb:61,180,255" src="assets/sparks/web.webp" alt="">
+    <img style="--i:1;--rgb:150,80,255" src="assets/sparks/data.webp" alt="">
+    <img style="--i:2;--rgb:255,48,64" src="assets/sparks/cyber.webp" alt="">
+    <img style="--i:3;--rgb:54,230,110" src="assets/sparks/bio.webp" alt="">
+    <img style="--i:4;--rgb:255,48,176" src="assets/sparks/marketing.webp" alt="">
+    <img style="--i:5;--rgb:255,140,205" src="assets/sparks/hr.webp" alt="">
+    <img style="--i:6;--rgb:255,150,30" src="assets/sparks/logistics.webp" alt="">
+    <img style="--i:7;--rgb:184,130,255" src="assets/sparks/general.webp" alt="">
+  </div>
+</section>
+
+<section class="message section">
+  <h2>THE FUTURE IS BUILT BY <span>PEOPLE WHO CONNECT.</span></h2>
+</section>
+
+<section class="section">
+  <div class="tracksHeader">
+    <h2>THE TRACKS.</h2>
+    <p>Eight paths. One connected community.</p>
+  </div>
+  <div class="trackGrid">
+    <div class="track" style="--rgb:61,180,255"><div class="mascot"><img src="assets/sparks/web.webp" alt="Web Development mascot" loading="lazy"></div><span class="trackName">WEB DEVELOPMENT</span></div>
+    <div class="track" style="--rgb:150,80,255"><div class="mascot"><img src="assets/sparks/data.webp" alt="Data Analysis mascot" loading="lazy"></div><span class="trackName">DATA ANALYSIS</span></div>
+    <div class="track" style="--rgb:255,48,64"><div class="mascot"><img src="assets/sparks/cyber.webp" alt="Cyber Security mascot" loading="lazy"></div><span class="trackName">CYBER SECURITY</span></div>
+    <div class="track" style="--rgb:54,230,110"><div class="mascot"><img src="assets/sparks/bio.webp" alt="Bioinformatics mascot" loading="lazy"></div><span class="trackName">BIOINFORMATICS</span></div>
+    <div class="track" style="--rgb:255,48,176"><div class="mascot"><img src="assets/sparks/marketing.webp" alt="Marketing mascot" loading="lazy"></div><span class="trackName">MARKETING</span></div>
+    <div class="track" style="--rgb:255,140,205"><div class="mascot"><img src="assets/sparks/hr.webp" alt="HR mascot" loading="lazy"></div><span class="trackName">HR</span></div>
+    <div class="track" style="--rgb:255,150,30"><div class="mascot"><img src="assets/sparks/logistics.webp" alt="Logistics mascot" loading="lazy"></div><span class="trackName">LOGISTICS</span></div>
+    <div class="track" style="--rgb:184,130,255"><div class="mascot"><img src="assets/sparks/general.webp" alt="General Skills mascot" loading="lazy"></div><span class="trackName">GENERAL SKILLS</span></div>
+  </div>
+</section>
+
+<section class="awaits section">
+  <h2>WHAT AWAITS YOU.</h2>
+  <div class="awaitsGrid">
+    <div class="awaitsItem"><h3>WORKSHOPS</h3><p>Practical sessions designed to turn knowledge into real skills.</p></div>
+    <div class="awaitsItem"><h3>CHALLENGES</h3><p>Test yourself, compete and push your limits.</p></div>
+    <div class="awaitsItem"><h3>PROJECTS</h3><p>Build things that actually connect you to the real world.</p></div>
+    <div class="awaitsItem"><h3>COMMUNITY</h3><p>Meet people, exchange ideas and grow together.</p></div>
+  </div>
+</section>
+
+<section class="join section" id="join">
+  <h2>READY?</h2>
+  <p>Your next skill starts here. Join the community and discover your path.</p>
+  <a class="joinButton" href="https://www.facebook.com/share/1CRonkPQkN/" target="_blank" rel="noopener noreferrer">JOIN THE COMMUNITY</a>
+</section>
+
+<section class="social section">
+  <h2>STAY CONNECTED.</h2>
+  <div class="socialLinks">
+    <a href="https://www.instagram.com/brightcodeunion?stkn=MXh1emtqd2xzaGtvbg==" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    <a href="https://www.facebook.com/share/1CRonkPQkN/" target="_blank" rel="noopener noreferrer">FACEBOOK</a>
+    <a href="https://www.linkedin.com/company/bright-code-union/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+  </div>
+  <form id="nameForm" class="nameForm">
+    <input id="nameInput" type="text" placeholder="WRITE YOUR FIRST NAME ONLY" autocomplete="off" required>
+    <button type="submit" aria-label="Submit name">→</button>
+  </form>
+</section>
+
+</main>
+
+<footer>
+  <p>BCU-Obour Branch</p>
+  <p>BUILD TOGETHER GROW TOGETHER.</p>
+</footer>
+
+<!-- ORIGINAL LOGIC (unchanged) -->
+<script>
+
+/* =========================
+   SUPABASE CONFIG
+========================= */
+
+const SUPABASE_URL =
+    "https://kyiyxkprrqdgosmhabjv.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_hMnZrZlncivkcZFgO7nlwA_QOnAwlVJ";
+
+const STORAGE_KEY =
+    "bcu_final_reveal_registration";
+
+
+/* =========================
+   EXPLORE
+========================= */
+
+const explore =
+    document.getElementById("explore");
+
+
+explore.addEventListener("click", () => {
+
+    document
+        .getElementById("website")
+        .scrollIntoView({
+
+            behavior: "smooth"
+
+        });
+
+});
+
+
+/* =========================
+   NAME FORM
+========================= */
+
+const nameForm =
+    document.getElementById("nameForm");
+
+
+const nameInput =
+    document.getElementById("nameInput");
+
+
+nameForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+
+        const originalName =
+            nameInput.value.trim();
+
+
+        const name =
+            originalName.toLowerCase();
+
+
+        /* =========================
+           VALIDATION
+        ========================= */
+
+        if (!originalName) {
+
+            alert("Please enter your name.");
+
+            return;
+
+        }
+
+
+        /* =========================
+           SPECIAL NAME
+        ========================= */
+
+        if (name === "no name") {
+
+            window.location.href =
+                "saher.html";
+
+            return;
+
+        }
+
+
+        /* =========================
+           PREVENT DUPLICATE ACCESS
+        ========================= */
+
+        const savedRegistration =
+            localStorage.getItem(STORAGE_KEY);
+
+
+        if (savedRegistration) {
+
+            try {
+
+                const registration =
+                    JSON.parse(savedRegistration);
+
+
+                if (
+                    registration &&
+                    registration.entry_number &&
+                    registration.unique_code
+                ) {
+
+                    window.location.href =
+                        "thank-you.html";
+
+                    return;
+
+                }
+
+            } catch (error) {
+
+                localStorage.removeItem(
+                    STORAGE_KEY
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           BUTTON STATE
+        ========================= */
+
+        const submitButton =
+            nameForm.querySelector("button");
+
+
+        submitButton.disabled = true;
+
+        submitButton.textContent = "…";
+
+
+        try {
+
+
+            /* =========================
+               SUPABASE REQUEST
+            ========================= */
+
+            const response =
+                await fetch(
+                    `${SUPABASE_URL}/rest/v1/rpc/register_participant`,
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                SUPABASE_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_KEY}`
+
+                        },
+
+                        body: JSON.stringify({
+
+                            p_name: originalName
+
+                        })
+
+                    }
+                );
+
+
+            const registration =
+                await response.json();
+
+
+            /* =========================
+               ERROR HANDLING
+            ========================= */
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    registration.message ||
+                    registration.error ||
+                    "Registration failed."
+
+                );
+
+            }
+
+
+            const normalizedRegistration =
+                Array.isArray(registration)
+                    ? registration[0]
+                    : registration;
+
+            if (
+                !normalizedRegistration ||
+                !normalizedRegistration.entry_number ||
+                !normalizedRegistration.unique_code
+            ) {
+
+                console.error(
+                    "Invalid Supabase response:",
+                    registration
+                );
+
+                alert(
+                    "Supabase returned:\n\n" +
+                    JSON.stringify(registration, null, 2)
+                );
+
+                throw new Error(
+                    "Invalid registration response."
+                );
+
+            }
+
+            /* =========================
+               SAVE REGISTRATION
+            ========================= */
+
+            const finalRegistration = {
+
+                name:
+                    normalizedRegistration.participant_name ||
+                    normalizedRegistration.name ||
+                    originalName,
+
+                entry_number:
+                    normalizedRegistration.entry_number,
+
+                unique_code:
+                    normalizedRegistration.unique_code
+
+            };
+
+
+            localStorage.setItem(
+
+                STORAGE_KEY,
+
+           JSON.stringify(
+               finalRegistration
+              )
+               );
+           /* ==========================
+           REDIRECT
+           ========================== */
+            window.location.href =
+                "thank-you.html";
+        } catch (error) {
+            console.error(
+                "Registration error:",
+                error
+                );
+            alert(
+    "Registration failed:\n\n" +
+    (error.message || "Unknown error")
+);
+            submitButton.disabled = false;
+            submitButton.textContent = "→";
+        }
+    }
+    );
+</script>
+
+<script>
+/* UI extras: keyboard access for Explore + card spotlight */
+document.getElementById("explore").addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.currentTarget.click(); }
+});
+document.querySelectorAll(".track").forEach(card => {
+    card.addEventListener("pointermove", e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+    });
+});
+</script>
+
+</body>
+</html>

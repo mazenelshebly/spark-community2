@@ -1,0 +1,1234 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>WEB DEVELOPMENT | SPARK</title>  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+
+      background: #0A0A0A;
+      color: #F7F4EB;
+
+      font-family: Arial, sans-serif;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 25px;
+
+      overflow: hidden;
+    }
+
+
+    /* =================================
+       MAIN CONTENT
+    ================================= */
+
+    .box {
+      width: 100%;
+      max-width: 700px;
+
+      text-align: center;
+
+      position: relative;
+      z-index: 30;
+    }
+
+
+    .track {
+      color: #7BE8F6;
+
+      font-size: 13px;
+      letter-spacing: 4px;
+
+      margin-bottom: 25px;
+    }
+
+
+    h1 {
+      font-size: clamp(35px, 8vw, 65px);
+
+      margin-bottom: 20px;
+    }
+
+
+    .question {
+      color: #aaa;
+
+      font-size: 18px;
+      line-height: 1.6;
+
+      margin-bottom: 30px;
+    }
+
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+
+    button {
+      width: 100%;
+
+      padding: 18px;
+
+      background: #111;
+
+      color: #F7F4EB;
+
+      border: 1px solid #333;
+
+      border-radius: 8px;
+
+      font-size: 16px;
+
+      cursor: pointer;
+
+      transition:
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+
+    button:hover {
+      border-color: #7BE8F6;
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 0 15px rgba(123,232,246,.08);
+    }
+
+
+    button:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+
+    #result {
+      margin-top: 30px;
+
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+
+    .correct {
+      color: #7BE8F6;
+    }
+
+
+    .wrong {
+      color: #FF5A2A;
+    }
+
+
+    /* =================================
+       NEON BUILD CLUE
+    ================================= */
+
+    .clue {
+      display: inline-block;
+
+      position: relative;
+
+      margin-top: 15px;
+
+      padding: 8px 24px;
+
+      min-width: 150px;
+
+      background: #071A3D;
+
+      color: #FFFFFF;
+
+      border: 1px solid #FFFFFF;
+
+      border-radius: 6px;
+
+      font-size: 30px;
+
+      font-weight: 900;
+
+      letter-spacing: 5px;
+
+      -webkit-text-stroke: .6px #FFFFFF;
+
+      text-shadow:
+        0 0 4px #FFFFFF,
+        0 0 9px #FFFFFF,
+        0 0 18px #7BE8F6,
+        0 0 30px rgba(123,232,246,.8);
+
+      box-shadow:
+        0 0 4px #FFFFFF,
+        0 0 10px #FFFFFF,
+        0 0 20px rgba(123,232,246,.7),
+        inset 0 0 12px rgba(123,232,246,.22);
+
+      animation:
+        buildReveal .8s cubic-bezier(.2,.8,.2,1) both,
+        buildPulse 2s ease-in-out .8s infinite;
+    }
+
+
+    /* Small neon line underneath */
+
+    .clue::after {
+      content: "";
+
+      position: absolute;
+
+      left: 15%;
+      right: 15%;
+
+      bottom: -5px;
+
+      height: 1px;
+
+      background: #FFFFFF;
+
+      box-shadow:
+        0 0 5px #FFFFFF,
+        0 0 12px #7BE8F6;
+
+      opacity: .9;
+    }
+
+
+    @keyframes buildReveal {
+
+      0% {
+        opacity: 0;
+
+        transform:
+          scale(.55)
+          translateY(12px);
+
+        filter:
+          blur(12px);
+      }
+
+      45% {
+        opacity: 1;
+
+        transform:
+          scale(1.12)
+          translateY(0);
+
+        filter:
+          blur(0);
+      }
+
+      70% {
+        transform:
+          scale(.96);
+      }
+
+      100% {
+        opacity: 1;
+
+        transform:
+          scale(1);
+      }
+
+    }
+
+
+    @keyframes buildPulse {
+
+      0%, 100% {
+
+        box-shadow:
+          0 0 4px #FFFFFF,
+          0 0 10px #FFFFFF,
+          0 0 20px rgba(123,232,246,.7),
+          inset 0 0 12px rgba(123,232,246,.22);
+      }
+
+      50% {
+
+        box-shadow:
+          0 0 7px #FFFFFF,
+          0 0 18px #FFFFFF,
+          0 0 35px rgba(123,232,246,.95),
+          inset 0 0 20px rgba(123,232,246,.35);
+      }
+
+    }
+
+
+    /* =================================
+       SPARK CHARACTER
+    ================================= */
+
+    #spark-stage {
+      position: fixed;
+
+      right: 6vw;
+      bottom: 4vh;
+
+      width: 190px;
+      height: 240px;
+
+      z-index: 20;
+
+      pointer-events: none;
+
+      transition:
+        transform .35s ease;
+    }
+
+
+    #spark-character {
+      position: absolute;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+
+      filter:
+        drop-shadow(
+          0 0 12px
+          rgba(123,232,246,.25)
+        );
+
+      transform-origin: center bottom;
+
+      animation:
+        sparkIdle 3s ease-in-out infinite;
+    }
+
+
+    #spark-glow {
+      position: absolute;
+
+      width: 130px;
+      height: 130px;
+
+      left: 30px;
+      bottom: 15px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(123,232,246,.13);
+
+      filter: blur(35px);
+
+      animation:
+        sparkGlow 2.5s ease-in-out infinite;
+    }
+
+
+    /* =================================
+       HAPPY SPARK
+    ================================= */
+
+    #spark-stage.happy {
+      animation:
+        sparkHappy .7s ease-out;
+    }
+
+
+    #spark-stage.happy #spark-character {
+      animation:
+        sparkHappyCharacter .7s ease-out;
+    }
+
+
+    #spark-stage.happy #spark-glow {
+      background:
+        rgba(123,232,246,.3);
+
+      animation:
+        happyGlow .7s ease-out;
+    }
+
+
+    /* =================================
+       SAD SPARK
+    ================================= */
+
+    #spark-stage.sad {
+      animation:
+        sparkSad .55s ease-in-out;
+    }
+
+
+    #spark-stage.sad #spark-character {
+      animation:
+        sparkSadCharacter .55s ease-in-out;
+    }
+
+
+    #spark-stage.sad #spark-glow {
+      background:
+        rgba(255,90,42,.2);
+    }
+
+
+    /* =================================
+       SPARK ANIMATIONS
+    ================================= */
+
+    @keyframes sparkIdle {
+
+      0%,100% {
+        transform:
+          translateY(0)
+          rotate(-1deg);
+      }
+
+      50% {
+        transform:
+          translateY(-10px)
+          rotate(1deg);
+      }
+    }
+
+
+    @keyframes sparkGlow {
+
+      0%,100% {
+        transform: scale(.8);
+        opacity: .35;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: .8;
+      }
+    }
+
+
+    @keyframes sparkHappy {
+
+      0% {
+        transform:
+          translateY(0)
+          scale(1);
+      }
+
+      30% {
+        transform:
+          translateY(-30px)
+          scale(1.05);
+      }
+
+      55% {
+        transform:
+          translateY(-12px)
+          scale(.98);
+      }
+
+      75% {
+        transform:
+          translateY(-22px)
+          scale(1.03);
+      }
+
+      100% {
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+
+    @keyframes sparkHappyCharacter {
+
+      0% {
+        transform: rotate(0deg);
+      }
+
+      30% {
+        transform: rotate(-6deg);
+      }
+
+      55% {
+        transform: rotate(6deg);
+      }
+
+      75% {
+        transform: rotate(-3deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+
+    @keyframes happyGlow {
+
+      0% {
+        transform: scale(.8);
+        opacity: .3;
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: .5;
+      }
+    }
+
+
+    @keyframes sparkSad {
+
+      0% {
+        transform: translateY(0);
+      }
+
+      25% {
+        transform: translateY(8px);
+      }
+
+      45% {
+        transform: translateY(3px);
+      }
+
+      65% {
+        transform: translateY(8px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+
+    @keyframes sparkSadCharacter {
+
+      0% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(-5deg);
+      }
+
+      50% {
+        transform: rotate(5deg);
+      }
+
+      75% {
+        transform: rotate(-3deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+
+    /* =================================
+       CANVAS
+    ================================= */
+
+    #spark-canvas {
+      position: fixed;
+
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      pointer-events: none;
+
+      z-index: 10;
+    }
+
+
+    /* =================================
+       SCREEN FLASH
+    ================================= */
+
+    #screen-flash {
+      position: fixed;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      z-index: 15;
+
+      opacity: 0;
+    }
+
+
+    #screen-flash.error {
+      background:
+        rgba(255,60,40,.12);
+
+      animation:
+        errorFlash .45s ease-out;
+    }
+
+
+    @keyframes errorFlash {
+
+      0% {
+        opacity: 0;
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+
+    /* =================================
+       MOBILE
+    ================================= */
+
+    @media (max-width:700px) {
+
+      #spark-stage {
+        width: 110px;
+        height: 145px;
+
+        right: 10px;
+        bottom: 10px;
+      }
+
+      .clue {
+        font-size: 25px;
+        padding: 7px 18px;
+      }
+
+    }
+
+  </style><link rel="stylesheet" href="assets/final-token.css">
+</head><body>  <!-- SPARK -->  <div id="spark-stage"><div id="spark-glow"></div>
+
+<img
+  id="spark-character"
+  src="assets/spark-web.png"
+  alt="SPARK Web Development"
+>
+
+  </div>  <!-- CANVAS --><canvas id="spark-canvas"></canvas>
+
+  <!-- ERROR FLASH -->  <div id="screen-flash"></div>  <!-- QUESTION -->  <div class="box"><div class="track">
+  TRACK 01 / WEB DEVELOPMENT
+</div>
+
+
+<h1>
+  THE FIRST CLUE
+</h1>
+
+
+<div class="question">
+  Which layer controls the structure of a webpage?
+</div>
+
+
+<div class="options">
+
+  <button onclick="checkAnswer(this, false)">
+    CSS
+  </button>
+
+  <button onclick="checkAnswer(this, true)">
+    HTML
+  </button>
+
+  <button onclick="checkAnswer(this, false)">
+    JavaScript
+  </button>
+
+  <button onclick="checkAnswer(this, false)">
+    SQL
+  </button>
+
+</div>
+
+
+<div id="result"></div>
+
+  </div>  <script>
+
+
+    /* =========================================
+       ELEMENTS
+    ========================================= */
+
+    const canvas =
+      document.getElementById("spark-canvas");
+
+    const ctx =
+      canvas.getContext("2d");
+
+    const sparkStage =
+      document.getElementById("spark-stage");
+
+    const screenFlash =
+      document.getElementById("screen-flash");
+
+
+    let width;
+    let height;
+
+
+    /* =========================================
+       CANVAS SIZE
+    ========================================= */
+
+    function resizeSparkCanvas() {
+
+      width =
+        canvas.width =
+        window.innerWidth;
+
+      height =
+        canvas.height =
+        window.innerHeight;
+    }
+
+
+    resizeSparkCanvas();
+
+
+    window.addEventListener(
+      "resize",
+      resizeSparkCanvas
+    );
+
+
+    /* =========================================
+       MOUSE
+    ========================================= */
+
+    const sparkMouse = {
+
+      x: window.innerWidth / 2,
+
+      y: window.innerHeight / 2
+    };
+
+
+    window.addEventListener(
+      "mousemove",
+      function(event) {
+
+        sparkMouse.x =
+          event.clientX;
+
+        sparkMouse.y =
+          event.clientY;
+
+      }
+    );
+
+
+    /* =========================================
+       PARTICLES
+    ========================================= */
+
+    const sparkParticles = [];
+
+
+    const codeSymbols = [
+
+      "</>",
+      "{ }",
+      "01",
+      "[]",
+      "&&",
+      ";",
+      "/>",
+      "<>",
+      "HTML",
+      "CSS",
+      "JS"
+
+    ];
+
+
+    for (
+      let i = 0;
+      i < 75;
+      i++
+    ) {
+
+      sparkParticles.push({
+
+        x:
+          Math.random() * width,
+
+        y:
+          Math.random() * height,
+
+        vx:
+          (Math.random() - .5) * .25,
+
+        vy:
+          (Math.random() - .5) * .25,
+
+        size:
+          Math.random() * 10 + 8,
+
+        symbol:
+          codeSymbols[
+            Math.floor(
+              Math.random() *
+              codeSymbols.length
+            )
+          ],
+
+        opacity:
+          Math.random() * .35 + .05,
+
+        baseOpacity:
+          Math.random() * .35 + .05,
+
+        color:
+          "#7BE8F6"
+
+      });
+
+    }
+
+
+    /* =========================================
+       PARTICLE COLOR
+    ========================================= */
+
+    function setParticlesColor(color) {
+
+      sparkParticles.forEach(
+        p => {
+
+          p.color = color;
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       RESET PARTICLES
+    ========================================= */
+
+    function resetParticlesColor() {
+
+      sparkParticles.forEach(
+        p => {
+
+          p.color =
+            "#7BE8F6";
+
+          p.opacity =
+            p.baseOpacity;
+
+        }
+      );
+
+    }
+
+
+    /* =========================================
+       HAPPY PARTICLE ANIMATION
+    ========================================= */
+
+    function happyParticles() {
+
+      const centerX =
+        width / 2;
+
+      const centerY =
+        height / 2;
+
+
+      sparkParticles.forEach(
+        (p, index) => {
+
+          const angle =
+            (index /
+            sparkParticles.length) *
+            Math.PI * 2;
+
+          const radius =
+            100 +
+            Math.random() * 180;
+
+
+          p.targetX =
+            centerX +
+            Math.cos(angle) *
+            radius;
+
+          p.targetY =
+            centerY +
+            Math.sin(angle) *
+            radius;
+
+        }
+      );
+
+
+      let progress = 0;
+
+
+      function animateHappy() {
+
+        progress += .025;
+
+
+        sparkParticles.forEach(
+          p => {
+
+            if (
+              p.targetX === undefined
+            ) return;
+
+
+            p.x +=
+              (p.targetX - p.x) *
+              .035;
+
+            p.y +=
+              (p.targetY - p.y) *
+              .035;
+
+          }
+        );
+
+
+        if (progress < 1) {
+
+          requestAnimationFrame(
+            animateHappy
+          );
+
+        }
+
+      }
+
+
+      animateHappy();
+
+
+      sparkParticles.forEach(
+        p => {
+
+          p.opacity = .75;
+
+        }
+      );
+
+
+      setTimeout(
+        resetParticlesColor,
+        900
+      );
+
+    }
+
+
+    /* =========================================
+       WRONG ANSWER ANIMATION
+    ========================================= */
+
+    function wrongParticles() {
+
+      setParticlesColor(
+        "#FF5A2A"
+      );
+
+
+      sparkParticles.forEach(
+        p => {
+
+          p.opacity =
+            Math.min(
+              p.baseOpacity + .35,
+              .8
+            );
+
+        }
+      );
+
+
+      screenFlash.classList.remove(
+        "error"
+      );
+
+
+      void screenFlash.offsetWidth;
+
+
+      screenFlash.classList.add(
+        "error"
+      );
+
+
+      setTimeout(
+        resetParticlesColor,
+        700
+      );
+
+    }
+
+
+    /* =========================================
+       ANSWER SYSTEM
+    ========================================= */
+
+    function checkAnswer(
+      button,
+      correct
+    ) {
+
+      const result =
+        document.getElementById(
+          "result"
+        );
+
+
+      if (correct) {
+
+        sparkStage.classList.remove(
+          "sad"
+        );
+
+        sparkStage.classList.add(
+          "happy"
+        );
+
+
+        happyParticles();
+
+
+        result.innerHTML = `
+
+          <div class="correct">
+            CORRECT.
+          </div>
+
+          <div>
+            YOUR CLUE IS:
+          </div>
+
+          <div class="clue">
+            BUILD
+          </div>
+          <div class="token-box" id="finalTokenBox"></div>
+
+        `;
+
+
+        document
+          .querySelectorAll("button")
+          .forEach(
+            btn => {
+
+              btn.disabled = true;
+
+            }
+          );
+
+
+        revealSparkFinalToken("web-development");
+
+        setTimeout(
+          () => {
+
+            sparkStage.classList.remove(
+              "happy"
+            );
+
+          },
+          800
+        );
+
+
+      } else {
+
+        sparkStage.classList.remove(
+          "happy"
+        );
+
+        sparkStage.classList.add(
+          "sad"
+        );
+
+
+        wrongParticles();
+
+
+        result.innerHTML = `
+
+          <div class="wrong">
+            NOT THIS ONE.
+          </div>
+
+          <div>
+            TRY AGAIN.
+          </div>
+
+        `;
+
+
+        setTimeout(
+          () => {
+
+            sparkStage.classList.remove(
+              "sad"
+            );
+
+          },
+          650
+        );
+
+      }
+
+    }
+
+
+    /* =========================================
+       MAIN PARTICLE LOOP
+    ========================================= */
+
+    function animateSpark() {
+
+      ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+
+      sparkParticles.forEach(
+        p => {
+
+          const dx =
+            sparkMouse.x -
+            p.x;
+
+
+          const dy =
+            sparkMouse.y -
+            p.y;
+
+
+          const distance =
+            Math.sqrt(
+              dx * dx +
+              dy * dy
+            );
+
+
+          if (
+            distance < 180
+          ) {
+
+            p.x +=
+              dx * .001;
+
+            p.y +=
+              dy * .001;
+
+          }
+
+
+          p.x += p.vx;
+
+          p.y += p.vy;
+
+
+          if (p.x < -50) {
+
+            p.x =
+              width + 50;
+
+          }
+
+
+          if (
+            p.x >
+            width + 50
+          ) {
+
+            p.x = -50;
+
+          }
+
+
+          if (p.y < -50) {
+
+            p.y =
+              height + 50;
+
+          }
+
+
+          if (
+            p.y >
+            height + 50
+          ) {
+
+            p.y = -50;
+
+          }
+
+
+          ctx.globalAlpha =
+            p.opacity;
+
+
+          ctx.font =
+            `${p.size}px monospace`;
+
+
+          ctx.fillStyle =
+            p.color;
+
+
+          ctx.fillText(
+            p.symbol,
+            p.x,
+            p.y
+          );
+
+        }
+      );
+
+
+      ctx.globalAlpha = 1;
+
+
+      requestAnimationFrame(
+        animateSpark
+      );
+
+    }
+
+
+    animateSpark();
+
+  </script><script src="assets/final-token.js"></script>
+</body></html>

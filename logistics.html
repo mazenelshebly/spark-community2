@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LOGISTICS | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #38200d 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #102c3d 0%, transparent 35%),
+        #0A0A0A;
+      color: #F7F4EB;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      overflow-x: hidden;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .track {
+      color: #FFB347;
+      font-size: 13px;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(35px, 8vw, 65px);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 25px rgba(255, 179, 71, 0.2);
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .spark {
+      width: 180px;
+      max-width: 45%;
+      filter: drop-shadow(0 0 20px rgba(255, 179, 71, 0.35));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .dashboard {
+      flex: 1;
+      min-width: 260px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: rgba(17, 17, 17, 0.95);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 18px 10px;
+    }
+
+    .stat-number {
+      color: #FFB347;
+      font-size: 27px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .stat-label {
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .progress-area {
+      text-align: left;
+      margin: 25px 0;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #FFB347, #7BE8F6);
+      transition: width 0.5s ease;
+    }
+
+    .stage {
+      background: rgba(15, 15, 15, 0.96);
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 20px;
+      animation: appear 0.5s ease;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .stage-number {
+      color: #FFB347;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .stage h2 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .stage-question {
+      color: #aaa;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .route-map {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 25px 0;
+    }
+
+    .location {
+      background: #171717;
+      border: 1px solid #555;
+      border-radius: 9px;
+      padding: 15px 10px;
+      min-width: 85px;
+      color: #FFB347;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .arrow {
+      color: #7BE8F6;
+      font-size: 22px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #333;
+      padding: 13px 8px;
+      text-align: center;
+    }
+
+    .data-table th {
+      background: #171717;
+      color: #FFB347;
+    }
+
+    .data-table td {
+      background: #101010;
+      color: #ddd;
+    }
+
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 25px 0;
+    }
+
+    .package {
+      background: #171717;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 20px 8px;
+    }
+
+    .package-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .package-name {
+      color: #FFB347;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .package-weight {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 17px;
+      background: #111;
+      color: #F7F4EB;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    button:hover {
+      border-color: #FFB347;
+      background: #201a12;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .correct {
+      color: #7BE8F6;
+      font-weight: bold;
+    }
+
+    .wrong {
+      color: #FF5A2A;
+      font-weight: bold;
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      background: linear-gradient(90deg, #FFB347, #7BE8F6);
+      color: #090909;
+      border: none;
+      font-weight: bold;
+    }
+
+    .clue {
+      margin-top: 15px;
+      font-size: 30px;
+      font-weight: bold;
+      color: #FF5A2A;
+      letter-spacing: 3px;
+    }
+
+    .final-screen {
+      display: none;
+      padding: 35px 20px;
+      border: 1px solid #FFB347;
+      border-radius: 15px;
+      background: rgba(255, 179, 71, 0.04);
+      animation: appear 0.7s ease;
+    }
+
+    .final-screen h2 {
+      color: #FFB347;
+      font-size: clamp(28px, 6vw, 45px);
+      margin-bottom: 15px;
+    }
+
+    .final-screen p {
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    .final-clue {
+      color: #FF5A2A;
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      margin-top: 20px;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      .stage {
+        padding: 20px 15px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .spark {
+        width: 145px;
+      }
+
+      .package-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .location {
+        min-width: 70px;
+        padding: 12px 6px;
+        font-size: 11px;
+      }
+
+      .arrow {
+        font-size: 16px;
+      }
+
+      .data-table {
+        font-size: 12px;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 10px 5px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <div class="box">
+
+    <div class="track">TRACK 07 / LOGISTICS</div>
+
+    <h1>MOVE THE MISSION</h1>
+
+    <div class="subtitle">
+      Plan the route. Manage the load. Deliver on time.
+    </div>
+
+    <div class="hero">
+
+      <img
+        src="assets/logistics-spark.png"
+        alt="Spark Logistics"
+        class="spark"
+      >
+
+      <div class="dashboard">
+
+        <div class="stat">
+          <div class="stat-number" id="packagesMoved">00</div>
+          <div class="stat-label">PACKAGES MOVED</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number" id="routesOptimized">00</div>
+          <div class="stat-label">ROUTES OPTIMIZED</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number" id="deliveryStatus">PENDING</div>
+          <div class="stat-label">DELIVERY STATUS</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="progress-area">
+
+      <div class="progress-text">
+        <span>MISSION PROGRESS</span>
+        <span id="progressText">0%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+    </div>
+
+    <div id="stageContainer"></div>
+
+    <div id="result"></div>
+
+    <div id="finalScreen" class="final-screen">
+
+      <h2>LOGISTICS MISSION COMPLETE</h2>
+
+      <p>
+        DELIVERY SUCCESSFUL.<br>
+        You planned the route, managed the load, and delivered on time.
+      </p>
+
+      <div class="final-clue">BUILD</div>
+
+      <div class="token-box" id="finalTokenBox"></div>
+
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentStage = 1;
+    let completedStages = 0;
+    let packagesMoved = 0;
+    let routesOptimized = 0;
+
+    const stages = [
+
+      {
+        number: "PHASE 01 / PLAN THE ROUTE",
+        title: "Find the efficient route",
+        question: "Which route reaches the destination with fewer stops?",
+
+        content: `
+          <div class="route-map">
+            <div class="location">START</div>
+            <div class="arrow">→</div>
+            <div class="location">A</div>
+            <div class="arrow">→</div>
+            <div class="location">C</div>
+            <div class="arrow">→</div>
+            <div class="location">B</div>
+            <div class="arrow">→</div>
+            <div class="location">FINISH</div>
+          </div>
+        `,
+
+        options: [
+          ["START → B → A → D → C → FINISH", false],
+          ["START → A → C → B → D → FINISH", true],
+          ["START → C → A → B → D → FINISH", false],
+          ["START → D → B → C → A → FINISH", false]
+        ]
+      },
+
+      {
+        number: "PHASE 02 / MANAGE THE LOAD",
+        title: "Find the heaviest package",
+        question: "Which package has the highest weight?",
+
+        content: `
+          <div class="package-grid">
+
+            <div class="package">
+              <div class="package-icon">📦</div>
+              <div class="package-name">A</div>
+              <div class="package-weight">10 KG</div>
+            </div>
+
+            <div class="package">
+              <div class="package-icon">📦</div>
+              <div class="package-name">B</div>
+              <div class="package-weight">25 KG</div>
+            </div>
+
+            <div class="package">
+              <div class="package-icon">📦</div>
+              <div class="package-name">C</div>
+              <div class="package-weight">5 KG</div>
+            </div>
+
+            <div class="package">
+              <div class="package-icon">📦</div>
+              <div class="package-name">D</div>
+              <div class="package-weight">40 KG</div>
+            </div>
+
+          </div>
+        `,
+
+        options: [
+          ["Package A", false],
+          ["Package B", false],
+          ["Package C", false],
+          ["Package D", true]
+        ]
+      },
+
+      {
+        number: "PHASE 03 / DELIVER ON TIME",
+        title: "Choose the fastest transport",
+        question: "Which transport option delivers the package fastest?",
+
+        content: `
+          <table class="data-table">
+
+            <tr>
+              <th>TRANSPORT</th>
+              <th>DELIVERY TIME</th>
+            </tr>
+
+            <tr>
+              <td>TRUCK 🚚</td>
+              <td>6 HOURS</td>
+            </tr>
+
+            <tr>
+              <td>TRAIN 🚆</td>
+              <td>4 HOURS</td>
+            </tr>
+
+            <tr>
+              <td>AIR FREIGHT ✈️</td>
+              <td>1 HOUR</td>
+            </tr>
+
+          </table>
+        `,
+
+        options: [
+          ["Truck", false],
+          ["Train", false],
+          ["Air Freight", true]
+        ]
+      }
+
+    ];
+
+    function updateDashboard() {
+
+      document.getElementById("packagesMoved").textContent =
+        String(packagesMoved).padStart(2, "0");
+
+      document.getElementById("routesOptimized").textContent =
+        String(routesOptimized).padStart(2, "0");
+
+      document.getElementById("deliveryStatus").textContent =
+        completedStages === 3 ? "DONE" : "PENDING";
+
+      const progress = Math.round((completedStages / 3) * 100);
+
+      document.getElementById("progressFill").style.width =
+        progress + "%";
+
+      document.getElementById("progressText").textContent =
+        progress + "%";
+    }
+
+    function loadStage() {
+
+      const stage = stages[currentStage - 1];
+
+      document.getElementById("stageContainer").innerHTML = `
+
+        <div class="stage">
+
+          <div class="stage-number">${stage.number}</div>
+
+          <h2>${stage.title}</h2>
+
+          <div class="stage-question">
+            ${stage.question}
+          </div>
+
+          ${stage.content}
+
+          <div class="options">
+
+            ${stage.options.map(option => `
+              <button onclick="checkAnswer(this, ${option[1]})">
+                ${option[0]}
+              </button>
+            `).join("")}
+
+          </div>
+
+        </div>
+
+      `;
+
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function checkAnswer(button, correct) {
+
+      const result = document.getElementById("result");
+
+      if (correct) {
+
+        completedStages++;
+        packagesMoved += 10;
+
+        if (currentStage === 1) {
+          routesOptimized++;
+        }
+
+        updateDashboard();
+
+        result.innerHTML = `
+          <div class="correct">MISSION STEP COMPLETE.</div>
+          <div>LOGISTICS DATA UPDATED.</div>
+
+          <button class="next-btn" onclick="nextStage()">
+            ${currentStage === 3 ? "COMPLETE MISSION" : "NEXT PHASE →"}
+          </button>
+        `;
+
+        document.querySelectorAll("#stageContainer button").forEach(btn => {
+          btn.disabled = true;
+        });
+
+      } else {
+
+        result.innerHTML = `
+          <div class="wrong">DELIVERY ERROR.</div>
+          <div>CHECK THE DATA AND TRY AGAIN.</div>
+        `;
+
+      }
+    }
+
+    function nextStage() {
+
+      if (currentStage === 3) {
+
+        document.getElementById("stageContainer").style.display = "none";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("finalScreen").style.display = "block";
+        revealSparkFinalToken("logistics");
+
+        updateDashboard();
+
+        return;
+      }
+
+      currentStage++;
+      loadStage();
+    }
+
+    loadStage();
+    updateDashboard();
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+</html>

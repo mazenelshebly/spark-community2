@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CYBER SECURITY | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #102b2d 0%, #080909 45%, #050505 100%);
+      color: #f7f4eb;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(#7be8f6 1px, transparent 1px),
+        linear-gradient(90deg, #7be8f6 1px, transparent 1px);
+      background-size: 45px 45px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    .box {
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .track {
+      color: #7be8f6;
+      font-size: 12px;
+      letter-spacing: 4px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #0d1516;
+      border: 1px solid #254448;
+      border-radius: 6px;
+      padding: 12px 15px;
+      margin-bottom: 28px;
+      color: #7be8f6;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .status-bar span::before {
+      content: "●";
+      margin-right: 6px;
+      color: #ff5a2a;
+    }
+
+    h1 {
+      font-size: clamp(34px, 8vw, 66px);
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+      text-shadow: 0 0 18px rgba(123, 232, 246, 0.25);
+    }
+
+    .subtitle {
+      color: #8ca3a6;
+      font-family: monospace;
+      font-size: 15px;
+      margin-bottom: 25px;
+    }
+
+    .spark-wrap {
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .spark-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid #254448;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(123, 232, 246, 0.12);
+      animation: pulse 2s infinite;
+    }
+
+    .spark {
+      width: 145px;
+      max-width: 100%;
+      filter: drop-shadow(0 0 15px rgba(123, 232, 246, 0.35));
+      transition: 0.3s;
+    }
+
+    .spark.happy {
+      animation: happy 0.6s ease;
+      filter: drop-shadow(0 0 22px rgba(123, 232, 246, 0.8));
+    }
+
+    .spark.sad {
+      animation: glitch 0.35s ease;
+      filter: drop-shadow(0 0 22px rgba(255, 90, 42, 0.8));
+    }
+
+    .terminal {
+      background: #080d0e;
+      border: 1px solid #29494d;
+      border-radius: 9px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      text-align: left;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .terminal-head {
+      background: #122022;
+      border-bottom: 1px solid #29494d;
+      padding: 10px 14px;
+      color: #6e9297;
+      font: 12px monospace;
+    }
+
+    .terminal-body {
+      padding: 22px;
+      font-family: monospace;
+      font-size: 17px;
+      line-height: 1.8;
+      color: #b9f7ff;
+      overflow-wrap: anywhere;
+    }
+
+    .prompt {
+      color: #7be8f6;
+    }
+
+    .question {
+      color: #a5b7ba;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .code {
+      background: #070b0c;
+      border: 1px solid #34565b;
+      border-radius: 7px;
+      padding: 22px;
+      margin-bottom: 25px;
+      color: #7be8f6;
+      font-family: monospace;
+      font-size: clamp(22px, 5vw, 32px);
+      letter-spacing: 5px;
+      text-shadow: 0 0 12px rgba(123, 232, 246, 0.4);
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 17px;
+      background: #0c1314;
+      color: #f7f4eb;
+      border: 1px solid #294448;
+      border-radius: 7px;
+      font-family: monospace;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      background: #122629;
+      border-color: #7be8f6;
+      color: #7be8f6;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-family: monospace;
+      font-size: 17px;
+      line-height: 1.7;
+      min-height: 35px;
+    }
+
+    .correct {
+      color: #7be8f6;
+      text-shadow: 0 0 10px rgba(123, 232, 246, 0.4);
+    }
+
+    .wrong {
+      color: #ff5a2a;
+      text-shadow: 0 0 10px rgba(255, 90, 42, 0.4);
+    }
+
+    .clue {
+      margin-top: 15px;
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      color: #7be8f6;
+    }
+
+    .next-btn {
+      margin-top: 22px;
+      background: #7be8f6;
+      color: #071012;
+      border-color: #7be8f6;
+      font-weight: bold;
+    }
+
+    .next-btn:hover {
+      background: #c9fbff;
+      color: #071012;
+    }
+
+    .progress {
+      display: flex;
+      gap: 8px;
+      margin: 25px 0;
+    }
+
+    .progress span {
+      height: 5px;
+      flex: 1;
+      background: #203234;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .progress span.active {
+      background: #7be8f6;
+      box-shadow: 0 0 12px rgba(123, 232, 246, 0.5);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .secure {
+      animation: secure 0.8s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    @keyframes happy {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.12) rotate(3deg);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes glitch {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-7px);
+      }
+
+      50% {
+        transform: translateX(7px);
+      }
+
+      75% {
+        transform: translateX(-4px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes secure {
+      0% {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 18px;
+      }
+
+      .status-bar {
+        font-size: 10px;
+      }
+
+      .terminal-body {
+        padding: 17px;
+        font-size: 14px;
+      }
+
+      .spark-wrap {
+        width: 145px;
+        height: 145px;
+      }
+
+      .spark {
+        width: 125px;
+      }
+
+      button {
+        padding: 15px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <div class="box">
+
+    <div class="track">TRACK 03 / CYBER SECURITY</div>
+
+    <div class="status-bar">
+      <span id="systemStatus">SYSTEM UNSTABLE</span>
+      <span id="firewallStatus">FIREWALL: OFFLINE</span>
+      <span id="securityLevel">SECURITY LEVEL: 01</span>
+    </div>
+
+    <h1 id="title">SECURE THE SYSTEM</h1>
+
+    <div class="subtitle" id="subtitle">
+      SPARK IS UNDER ATTACK. COMPLETE THE SECURITY PROTOCOL.
+    </div>
+
+    <div class="spark-wrap">
+      <img
+        id="spark"
+        class="spark"
+        src="assets/cyber-spark.png"
+        alt="Cyber Spark"
+      >
+    </div>
+
+    <div class="progress">
+      <span id="progress1" class="active"></span>
+      <span id="progress2"></span>
+      <span id="progress3"></span>
+    </div>
+
+    <div class="terminal">
+
+      <div class="terminal-head">
+        spark@security-system:~$ secure_protocol.exe
+      </div>
+
+      <div class="terminal-body">
+        <div>
+          <span class="prompt">></span>
+          <span id="terminalMessage">
+            INTRUSION DETECTED. DECODE THE MESSAGE.
+          </span>
+        </div>
+
+        <br>
+
+        <div class="question" id="question">
+          A Caesar cipher has shifted every letter forward by 3.
+          What does this message say?
+        </div>
+
+        <div class="code" id="code">
+          QEB CRQROB
+        </div>
+
+        <div class="options" id="options">
+
+          <button onclick="checkAnswer(0)">
+            THE FUTURE IS
+          </button>
+
+          <button onclick="checkAnswer(1)">
+            THE FUTURE
+          </button>
+
+          <button onclick="checkAnswer(2)">
+            THE PEOPLE
+          </button>
+
+          <button onclick="checkAnswer(3)">
+            BUILD THE FUTURE
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div id="result"></div>
+
+  </div>
+
+  <script>
+    let currentStage = 1;
+
+    const stages = [
+      {
+        title: "DECODE THE MESSAGE",
+        terminal: "INTRUSION DETECTED. DECODE THE MESSAGE.",
+        question:
+          "A Caesar cipher has shifted every letter forward by 3. What does this message say?",
+        code: "QEB CRQROB",
+        options: [
+          "THE FUTURE IS",
+          "THE FUTURE",
+          "THE PEOPLE",
+          "BUILD THE FUTURE"
+        ],
+        correct: 1
+      },
+
+      {
+        title: "SPOT THE THREAT",
+        terminal: "PHISHING ATTACK DETECTED. IDENTIFY THE THREAT.",
+        question:
+          "Which message is most likely a phishing attack?",
+        code: "INBOX_SCAN.exe",
+        options: [
+          "Your class starts tomorrow at 9 AM.",
+          "Your password was changed successfully.",
+          "URGENT: Click here to verify your password now.",
+          "Welcome to the Cyber Security track."
+        ],
+        correct: 2
+      },
+
+      {
+        title: "BUILD THE DEFENSE",
+        terminal: "FIREWALL REQUIRED. CHOOSE THE STRONGEST PASSWORD.",
+        question:
+          "Which password is the strongest?",
+        code: "PASSWORD_CHECK",
+        options: [
+          "12345678",
+          "spark2026",
+          "password",
+          "S!9v#Q2@Lm7"
+        ],
+        correct: 3
+      }
+    ];
+
+    function checkAnswer(selected) {
+      const stage = stages[currentStage - 1];
+      const result = document.getElementById("result");
+      const spark = document.getElementById("spark");
+      const buttons = document.querySelectorAll("#options button");
+
+      if (selected === stage.correct) {
+        spark.classList.remove("sad");
+        spark.classList.add("happy");
+
+        buttons.forEach(button => {
+          button.disabled = true;
+        });
+
+        if (currentStage === 3) {
+          document.getElementById("systemStatus").textContent =
+            "SYSTEM SECURED";
+
+          document.getElementById("firewallStatus").textContent =
+            "FIREWALL: ACTIVE";
+
+          document.getElementById("securityLevel").textContent =
+            "SECURITY LEVEL: MAX";
+
+          document.getElementById("terminalMessage").textContent =
+            "ALL THREATS NEUTRALIZED. SYSTEM SECURED.";
+
+          document.getElementById("title").textContent =
+            "SYSTEM SECURED";
+
+          document.getElementById("subtitle").textContent =
+            "SPARK IS SAFE. YOU COMPLETED THE SECURITY PROTOCOL.";
+
+          result.innerHTML = `
+            <div class="correct secure">ACCESS GRANTED.</div>
+            <div class="correct">ALL SECURITY PROTOCOLS COMPLETE.</div>
+            <div>YOUR CLUE IS:</div>
+            <div class="clue">GROW</div><div class="token-box" id="finalTokenBox"></div>
+          `;
+
+          document.querySelector(".terminal").classList.add("secure");
+          revealSparkFinalToken("cyber-security");
+        } else {
+          result.innerHTML = `
+            <div class="correct">CORRECT.</div>
+            <div>THREAT LEVEL REDUCED.</div>
+            <button class="next-btn" onclick="nextStage()">
+              CONTINUE SECURITY PROTOCOL →
+            </button>
+          `;
+        }
+
+      } else {
+        spark.classList.remove("happy");
+        spark.classList.add("sad");
+
+        result.innerHTML = `
+          <div class="wrong">ACCESS DENIED.</div>
+          <div class="wrong">WRONG SECURITY RESPONSE.</div>
+          <div>TRY AGAIN.</div>
+        `;
+
+        setTimeout(() => {
+          spark.classList.remove("sad");
+        }, 500);
+      }
+    }
+
+    function nextStage() {
+      currentStage++;
+
+      const stage = stages[currentStage - 1];
+
+      document.getElementById("title").textContent = stage.title;
+      document.getElementById("terminalMessage").textContent =
+        stage.terminal;
+      document.getElementById("question").textContent =
+        stage.question;
+      document.getElementById("code").textContent =
+        stage.code;
+      document.getElementById("result").innerHTML = "";
+
+      document.getElementById("securityLevel").textContent =
+        "SECURITY LEVEL: 0" + currentStage;
+
+      document.getElementById("firewallStatus").textContent =
+        currentStage === 2
+          ? "FIREWALL: SCANNING"
+          : "FIREWALL: ACTIVE";
+
+      document.getElementById("progress1").classList.toggle(
+        "active",
+        currentStage >= 1
+      );
+
+      document.getElementById("progress2").classList.toggle(
+        "active",
+        currentStage >= 2
+      );
+
+      document.getElementById("progress3").classList.toggle(
+        "active",
+        currentStage >= 3
+      );
+
+      const options = document.getElementById("options");
+
+      options.innerHTML = "";
+
+      stage.options.forEach((option, index) => {
+        const button = document.createElement("button");
+
+        button.textContent = option;
+        button.onclick = () => checkAnswer(index);
+
+        options.appendChild(button);
+      });
+    }
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+</html>

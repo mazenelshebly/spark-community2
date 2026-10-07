@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DATA ANALYSIS | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #24113f 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #102b4c 0%, transparent 35%),
+        #0A0A0A;
+      color: #F7F4EB;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      overflow-x: hidden;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+      position: relative;
+    }
+
+    .track {
+      color: #7BE8F6;
+      font-size: 13px;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(35px, 8vw, 65px);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 25px rgba(123, 232, 246, 0.2);
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 17px;
+      margin-bottom: 25px;
+    }
+
+    .spark-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .spark {
+      width: 170px;
+      max-width: 45%;
+      filter: drop-shadow(0 0 18px rgba(123, 232, 246, 0.35));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .dashboard {
+      flex: 1;
+      min-width: 260px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: rgba(17, 17, 17, 0.9);
+      border: 1px solid #292929;
+      border-radius: 12px;
+      padding: 18px 10px;
+    }
+
+    .stat-number {
+      color: #7BE8F6;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      color: #aaa;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .progress-area {
+      margin: 25px 0;
+      text-align: left;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #1b1b1b;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid #292929;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #7BE8F6, #9b6cff);
+      transition: width 0.5s ease;
+    }
+
+    .stage {
+      background: rgba(15, 15, 15, 0.95);
+      border: 1px solid #292929;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+      animation: appear 0.5s ease;
+    }
+
+    .stage-number {
+      color: #9b6cff;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .stage h2 {
+      font-size: 25px;
+      margin-bottom: 12px;
+    }
+
+    .stage-question {
+      color: #aaa;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 15px;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #333;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .data-table th {
+      color: #7BE8F6;
+      background: #151515;
+    }
+
+    .data-table td {
+      color: #ddd;
+      background: #101010;
+    }
+
+    .chart {
+      height: 160px;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 15px;
+      padding: 15px;
+      margin: 20px 0;
+      border-bottom: 1px solid #444;
+      border-left: 1px solid #444;
+    }
+
+    .bar {
+      width: 35px;
+      height: var(--height);
+      background: linear-gradient(to top, #7BE8F6, #9b6cff);
+      border-radius: 5px 5px 0 0;
+      animation: grow 1s ease;
+      position: relative;
+    }
+
+    .bar span {
+      position: absolute;
+      top: -23px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 17px;
+      background: #111;
+      color: #F7F4EB;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 17px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    button:hover {
+      border-color: #7BE8F6;
+      background: #171d20;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .correct {
+      color: #7BE8F6;
+      font-weight: bold;
+    }
+
+    .wrong {
+      color: #FF5A2A;
+      font-weight: bold;
+    }
+
+    .clue {
+      margin-top: 15px;
+      font-size: 30px;
+      font-weight: bold;
+      color: #FF5A2A;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px rgba(255, 90, 42, 0.25);
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      background: linear-gradient(90deg, #7BE8F6, #9b6cff);
+      color: #090909;
+      border: none;
+      font-weight: bold;
+    }
+
+    .final-screen {
+      display: none;
+      padding: 35px 20px;
+      border: 1px solid #7BE8F6;
+      border-radius: 15px;
+      background: rgba(123, 232, 246, 0.04);
+      animation: appear 0.7s ease;
+    }
+
+    .final-screen h2 {
+      color: #7BE8F6;
+      font-size: clamp(28px, 6vw, 45px);
+      margin-bottom: 15px;
+    }
+
+    .final-screen p {
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    .final-clue {
+      color: #FF5A2A;
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      margin-top: 20px;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes grow {
+      from {
+        height: 0;
+      }
+
+      to {
+        height: var(--height);
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      .stage {
+        padding: 20px 15px;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .spark {
+        width: 140px;
+      }
+
+      .data-table {
+        font-size: 12px;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 9px 4px;
+      }
+
+      .chart {
+        gap: 8px;
+      }
+
+      .bar {
+        width: 25px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <div class="box">
+
+    <div class="track">TRACK 02 / DATA ANALYSIS</div>
+
+    <h1>FIND THE PATTERN</h1>
+
+    <div class="subtitle">
+      Read the data. Spot the anomaly. Make the decision.
+    </div>
+
+    <div class="spark-area">
+
+      <!-- Change the image path if your Spark image has another name -->
+      <img
+        src="assets/data-spark.png"
+        alt="Spark Data Analysis"
+        class="spark"
+      >
+
+      <div class="dashboard">
+
+        <div class="stat">
+          <div class="stat-number" id="dataCount">00</div>
+          <div class="stat-label">TOTAL DATA</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number" id="anomalyCount">00</div>
+          <div class="stat-label">ANOMALIES FOUND</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number" id="insightLevel">LOW</div>
+          <div class="stat-label">INSIGHT LEVEL</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="progress-area">
+
+      <div class="progress-text">
+        <span>ANALYSIS PROGRESS</span>
+        <span id="progressText">0%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+    </div>
+
+    <div id="stageContainer">
+
+      <div class="stage">
+
+        <div class="stage-number">PHASE 01 / READ THE DATA</div>
+
+        <h2>Understand the numbers</h2>
+
+        <div class="stage-question">
+          Look at the table below. What happened to the sales?
+        </div>
+
+        <table class="data-table">
+
+          <tr>
+            <th>DAY</th>
+            <th>VISITORS</th>
+            <th>SALES</th>
+          </tr>
+
+          <tr>
+            <td>MON</td>
+            <td>100</td>
+            <td>$500</td>
+          </tr>
+
+          <tr>
+            <td>TUE</td>
+            <td>200</td>
+            <td>$1000</td>
+          </tr>
+
+          <tr>
+            <td>WED</td>
+            <td>300</td>
+            <td>$1500</td>
+          </tr>
+
+        </table>
+
+        <div class="options">
+
+          <button onclick="checkAnswer(this, true)">
+            Sales increased proportionally.
+          </button>
+
+          <button onclick="checkAnswer(this, false)">
+            Sales decreased every day.
+          </button>
+
+          <button onclick="checkAnswer(this, false)">
+            Visitors increased but sales stopped.
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="result"></div>
+
+    <div id="finalScreen" class="final-screen">
+
+      <h2>DATA ANALYSIS COMPLETE</h2>
+
+      <p>
+        PATTERN IDENTIFIED.<br>
+        You read the data, found the anomaly, and made the right decision.
+      </p>
+
+      <div class="final-clue">TOGETHER</div>
+
+      <div class="token-box" id="finalTokenBox"></div>
+
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentStage = 1;
+    let completedStages = 0;
+    let totalData = 0;
+    let anomalies = 0;
+
+    const stages = [
+
+      {
+        number: "PHASE 01 / READ THE DATA",
+        title: "Understand the numbers",
+        question: "Look at the table below. What happened to the sales?",
+
+        content: `
+          <table class="data-table">
+            <tr>
+              <th>DAY</th>
+              <th>VISITORS</th>
+              <th>SALES</th>
+            </tr>
+            <tr>
+              <td>MON</td>
+              <td>100</td>
+              <td>$500</td>
+            </tr>
+            <tr>
+              <td>TUE</td>
+              <td>200</td>
+              <td>$1000</td>
+            </tr>
+            <tr>
+              <td>WED</td>
+              <td>300</td>
+              <td>$1500</td>
+            </tr>
+          </table>
+        `,
+
+        options: [
+          ["Sales increased proportionally.", true],
+          ["Sales decreased every day.", false],
+          ["Visitors increased but sales stopped.", false]
+        ]
+      },
+
+      {
+        number: "PHASE 02 / SPOT THE OUTLIER",
+        title: "Find the strange number",
+        question: "Which value does not belong to the pattern?",
+
+        content: `
+          <div class="chart">
+            <div class="bar" style="--height: 55px;">
+              <span>20</span>
+            </div>
+
+            <div class="bar" style="--height: 65px;">
+              <span>22</span>
+            </div>
+
+            <div class="bar" style="--height: 60px;">
+              <span>21</span>
+            </div>
+
+            <div class="bar" style="--height: 135px;">
+              <span>95</span>
+            </div>
+
+            <div class="bar" style="--height: 68px;">
+              <span>23</span>
+            </div>
+          </div>
+        `,
+
+        options: [
+          ["21", false],
+          ["95", true],
+          ["23", false],
+          ["20", false]
+        ]
+      },
+
+      {
+        number: "PHASE 03 / MAKE THE DECISION",
+        title: "Choose the best product",
+        question: "Which product generated the highest sales?",
+
+        content: `
+          <table class="data-table">
+            <tr>
+              <th>PRODUCT</th>
+              <th>SALES</th>
+            </tr>
+            <tr>
+              <td>PRODUCT A</td>
+              <td>$1200</td>
+            </tr>
+            <tr>
+              <td>PRODUCT B</td>
+              <td>$1850</td>
+            </tr>
+            <tr>
+              <td>PRODUCT C</td>
+              <td>$950</td>
+            </tr>
+          </table>
+        `,
+
+        options: [
+          ["Product A", false],
+          ["Product B", true],
+          ["Product C", false]
+        ]
+      }
+
+    ];
+
+    function updateDashboard() {
+      document.getElementById("dataCount").textContent =
+        String(totalData).padStart(2, "0");
+
+      document.getElementById("anomalyCount").textContent =
+        String(anomalies).padStart(2, "0");
+
+      let level = "LOW";
+
+      if (completedStages === 1) {
+        level = "MEDIUM";
+      }
+
+      if (completedStages === 2) {
+        level = "HIGH";
+      }
+
+      if (completedStages === 3) {
+        level = "EXPERT";
+      }
+
+      document.getElementById("insightLevel").textContent = level;
+
+      const progress = Math.round((completedStages / 3) * 100);
+
+      document.getElementById("progressFill").style.width =
+        progress + "%";
+
+      document.getElementById("progressText").textContent =
+        progress + "%";
+    }
+
+    function loadStage() {
+      const stage = stages[currentStage - 1];
+
+      document.getElementById("stageContainer").innerHTML = `
+        <div class="stage">
+
+          <div class="stage-number">${stage.number}</div>
+
+          <h2>${stage.title}</h2>
+
+          <div class="stage-question">
+            ${stage.question}
+          </div>
+
+          ${stage.content}
+
+          <div class="options">
+            ${stage.options.map((option, index) => `
+              <button onclick="checkAnswer(this, ${option[1]})">
+                ${option[0]}
+              </button>
+            `).join("")}
+          </div>
+
+        </div>
+      `;
+
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function checkAnswer(button, correct) {
+
+      const result = document.getElementById("result");
+
+      totalData++;
+
+      if (correct) {
+
+        completedStages++;
+
+        if (currentStage === 2) {
+          anomalies++;
+        }
+
+        updateDashboard();
+
+        result.innerHTML = `
+          <div class="correct">CORRECT.</div>
+          <div>DATA INSIGHT UNLOCKED.</div>
+          <button class="next-btn" onclick="nextStage()">
+            ${currentStage === 3 ? "COMPLETE ANALYSIS" : "NEXT PHASE →"}
+          </button>
+        `;
+
+        document.querySelectorAll("button").forEach(btn => {
+          if (!btn.classList.contains("next-btn")) {
+            btn.disabled = true;
+          }
+        });
+
+      } else {
+
+        result.innerHTML = `
+          <div class="wrong">NOT THIS ONE.</div>
+          <div>CHECK THE DATA AND TRY AGAIN.</div>
+        `;
+
+      }
+    }
+
+    function nextStage() {
+
+      if (currentStage === 3) {
+
+        document.getElementById("stageContainer").style.display = "none";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("finalScreen").style.display = "block";
+        revealSparkFinalToken("data-analysis");
+
+        return;
+      }
+
+      currentStage++;
+      loadStage();
+    }
+
+    updateDashboard();
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+              </html>

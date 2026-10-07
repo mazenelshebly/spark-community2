@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MARKETING | SPARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0A0A0A;
+      --card: #111111;
+      --text: #F7F4EB;
+      --muted: #999999;
+      --pink: #F472D0;
+      --orange: #FF7A18;
+      --cyan: #7BE8F6;
+      --purple: #A855F7;
+      --border: #2c2c2c;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(244, 114, 208, 0.12),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at bottom left,
+          rgba(255, 122, 24, 0.10),
+          transparent 35%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 30px 18px;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+    }
+
+    .track {
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 4px;
+      margin-bottom: 20px;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .hero img {
+      width: 145px;
+      max-width: 35%;
+      object-fit: contain;
+      filter: drop-shadow(
+        0 0 18px rgba(244, 114, 208, 0.25)
+      );
+    }
+
+    .hero-text {
+      text-align: left;
+    }
+
+    h1 {
+      font-size: clamp(34px, 7vw, 62px);
+      line-height: 1;
+      margin-bottom: 12px;
+      letter-spacing: -2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 370px;
+    }
+
+    .progress-area {
+      margin: 25px 0;
+      text-align: left;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 7px;
+      background: #222;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        var(--orange),
+        var(--pink)
+      );
+      transition: width 0.4s ease;
+    }
+
+    .profile {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .profile-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 8px;
+      transition: 0.3s;
+    }
+
+    .profile-card .number {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .profile-card .name {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 7px;
+    }
+
+    .profile-card .status {
+      font-size: 10px;
+      color: #555;
+      font-weight: bold;
+    }
+
+    .profile-card.active {
+      border-color: var(--pink);
+      background: rgba(244, 114, 208, 0.08);
+    }
+
+    .profile-card.active .number,
+    .profile-card.active .status {
+      color: var(--pink);
+    }
+
+    .question-box {
+      background: rgba(17, 17, 17, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 22px;
+    }
+
+    .stage {
+      color: var(--orange);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      font-size: clamp(20px, 4vw, 29px);
+      line-height: 1.35;
+      margin-bottom: 25px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 17px 15px;
+      background: #0d0d0d;
+      color: var(--text);
+      border: 1px solid #333;
+      border-radius: 9px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: var(--pink);
+      background: rgba(244, 114, 208, 0.08);
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    #result {
+      min-height: 80px;
+      margin-top: 25px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .correct {
+      color: var(--cyan);
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .wrong {
+      color: var(--orange);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .clue {
+      margin-top: 10px;
+      font-size: 31px;
+      font-weight: bold;
+      color: var(--pink);
+      letter-spacing: 5px;
+    }
+
+    .next-btn,
+    .restart-btn {
+      margin-top: 20px;
+      background: linear-gradient(
+        90deg,
+        var(--orange),
+        var(--pink)
+      );
+      color: #0A0A0A;
+      border: none;
+      font-weight: bold;
+    }
+
+    .next-btn:hover,
+    .restart-btn:hover {
+      background: linear-gradient(
+        90deg,
+        var(--pink),
+        var(--orange)
+      );
+      color: #0A0A0A;
+    }
+
+    .final-screen {
+      display: none;
+      background: rgba(17, 17, 17, 0.95);
+      border: 1px solid var(--pink);
+      border-radius: 16px;
+      padding: 38px 22px;
+    }
+
+    .final-screen h2 {
+      font-size: clamp(30px, 7vw, 50px);
+      margin-bottom: 15px;
+    }
+
+    .final-screen p {
+      color: #aaa;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .final-word {
+      color: var(--pink);
+      font-size: clamp(42px, 10vw, 75px);
+      font-weight: bold;
+      letter-spacing: 8px;
+      margin: 20px 0;
+    }
+
+    .footer {
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 560px) {
+      .hero {
+        gap: 12px;
+      }
+
+      .hero img {
+        width: 110px;
+      }
+
+      .hero-text {
+        text-align: left;
+      }
+
+      .profile {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .question-box {
+        padding: 24px 16px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="assets/final-token.css">
+</head>
+
+<body>
+
+  <main class="box">
+
+    <div class="track">TRACK 10 / MARKETING</div>
+
+    <section class="hero">
+      <img
+        src="assets/marketing-spark.png"
+        alt="Marketing Spark"
+      >
+
+      <div class="hero-text">
+        <h1>
+          CAPTURE<br>
+          ATTENTION.
+        </h1>
+
+        <p class="subtitle">
+          Great marketing doesn’t just sell.
+          It makes people care.
+        </p>
+      </div>
+    </section>
+
+    <section class="progress-area">
+      <div class="progress-label">
+        <span>MARKETING PROGRESS</span>
+        <span id="progressText">0 / 4</span>
+      </div>
+
+      <div class="progress">
+        <div
+          class="progress-fill"
+          id="progressFill"
+        ></div>
+      </div>
+    </section>
+
+    <section class="profile">
+
+      <div class="profile-card" id="card0">
+        <div class="number">01</div>
+        <div class="name">AUDIENCE</div>
+        <div class="status">LOCKED</div>
+      </div>
+
+      <div class="profile-card" id="card1">
+        <div class="number">02</div>
+        <div class="name">BRANDING</div>
+        <div class="status">LOCKED</div>
+      </div>
+
+      <div class="profile-card" id="card2">
+        <div class="number">03</div>
+        <div class="name">CONTENT</div>
+        <div class="status">LOCKED</div>
+      </div>
+
+      <div class="profile-card" id="card3">
+        <div class="number">04</div>
+        <div class="name">CAMPAIGN</div>
+        <div class="status">LOCKED</div>
+      </div>
+
+    </section>
+
+    <section
+      class="question-box"
+      id="quizBox"
+    >
+
+      <div
+        class="stage"
+        id="stage"
+      >
+        STAGE 01 / TARGET AUDIENCE
+      </div>
+
+      <div
+        class="question"
+        id="question"
+      >
+        Who should a marketer understand first?
+      </div>
+
+      <div
+        class="options"
+        id="options"
+      ></div>
+
+      <div id="result"></div>
+
+    </section>
+
+    <section
+      class="final-screen"
+      id="finalScreen"
+    >
+
+      <h2>
+        CAMPAIGN<br>
+        ACTIVATED.
+      </h2>
+
+      <p>
+        You understood the audience,
+        built the brand, created the message,
+        and prepared the campaign.
+      </p>
+
+      <!-- FINAL CLUE: TOGETHER -->
+      <div class="final-word">TOGETHER</div>
+
+      <p>
+        Your final clue is ready.
+        Now build something people care about.
+      </p>
+
+      <div class="token-box" id="finalTokenBox"></div>
+
+      <button
+        class="restart-btn"
+        onclick="restartQuiz()"
+      >
+        RESTART MARKETING
+      </button>
+
+    </section>
+
+    <div class="footer">
+      SPARK SYSTEMS / MARKETING MODULE
+    </div>
+
+  </main>
+
+  <script>
+    const stages = [
+      {
+        title: "STAGE 01 / TARGET AUDIENCE",
+        question: "Who should a marketer understand first?",
+        answers: [
+          "The competitors",
+          "The target audience",
+          "The logo",
+          "The office"
+        ],
+        correct: 1,
+        message: "AUDIENCE IDENTIFIED ✓"
+      },
+      {
+        title: "STAGE 02 / BRANDING",
+        question: "What makes a brand memorable?",
+        answers: [
+          "Using many random colors",
+          "Copying every brand",
+          "A clear and consistent identity",
+          "Changing the message daily"
+        ],
+        correct: 2,
+        message: "BRAND IDENTITY UNLOCKED ✓"
+      },
+      {
+        title: "STAGE 03 / CONTENT",
+        question: "What is the best marketing content?",
+        answers: [
+          "Content that only looks good",
+          "Content that connects with the audience",
+          "Content with no clear message",
+          "Content copied from others"
+        ],
+        correct: 1,
+        message: "CREATIVE MESSAGE READY ✓"
+      },
+      {
+        title: "STAGE 04 / CAMPAIGN STRATEGY",
+        question:
+          "What should a marketer do before launching a campaign?",
+        answers: [
+          "Post randomly",
+          "Use the biggest budget",
+          "Ignore the audience",
+          "Set a clear goal"
+        ],
+        correct: 3,
+        message: "CAMPAIGN ACTIVATED ✓"
+      }
+    ];
+
+    let currentStage = 0;
+    let completedStages = 0;
+
+    const stageElement =
+      document.getElementById("stage");
+
+    const questionElement =
+      document.getElementById("question");
+
+    const optionsElement =
+      document.getElementById("options");
+
+    const resultElement =
+      document.getElementById("result");
+
+    const progressFill =
+      document.getElementById("progressFill");
+
+    const progressText =
+      document.getElementById("progressText");
+
+    const quizBox =
+      document.getElementById("quizBox");
+
+    const finalScreen =
+      document.getElementById("finalScreen");
+
+    function loadStage() {
+      const stage = stages[currentStage];
+
+      stageElement.textContent = stage.title;
+      questionElement.textContent = stage.question;
+      resultElement.innerHTML = "";
+      optionsElement.innerHTML = "";
+
+      stage.answers.forEach((answer, index) => {
+        const button = document.createElement("button");
+
+        button.textContent = answer;
+
+        button.onclick = function () {
+          checkAnswer(index, button);
+        };
+
+        optionsElement.appendChild(button);
+      });
+
+      updateProgress();
+    }
+
+    function checkAnswer(
+      selectedIndex,
+      selectedButton
+    ) {
+      const stage = stages[currentStage];
+
+      if (selectedIndex === stage.correct) {
+        completedStages++;
+
+        document
+          .querySelectorAll("#options button")
+          .forEach(button => {
+            button.disabled = true;
+          });
+
+        document
+          .getElementById(`card${currentStage}`)
+          .classList.add("active");
+
+        document
+          .getElementById(`card${currentStage}`)
+          .querySelector(".status")
+          .textContent = "UNLOCKED";
+
+        resultElement.innerHTML = `
+          <div class="correct">
+            ${stage.message}
+          </div>
+
+          <div>
+            YOU UNLOCKED THIS SKILL.
+          </div>
+
+          <button
+            class="next-btn"
+            onclick="nextStage()"
+          >
+            ${
+              currentStage === stages.length - 1
+                ? "COMPLETE MARKETING →"
+                : "NEXT STAGE →"
+            }
+          </button>
+        `;
+
+        updateProgress();
+
+      } else {
+        resultElement.innerHTML = `
+          <div class="wrong">
+            NOT THIS ONE.
+          </div>
+
+          <div>
+            THINK LIKE A MARKETER. TRY AGAIN.
+          </div>
+        `;
+
+        selectedButton.style.borderColor =
+          "#FF7A18";
+      }
+    }
+
+    function nextStage() {
+      if (
+        currentStage === stages.length - 1
+      ) {
+        quizBox.style.display = "none";
+        finalScreen.style.display = "block";
+        revealSparkFinalToken("marketing");
+
+        progressFill.style.width = "100%";
+        progressText.textContent = "4 / 4";
+
+        return;
+      }
+
+      currentStage++;
+      loadStage();
+    }
+
+    function updateProgress() {
+      const percentage =
+        (completedStages / stages.length) * 100;
+
+      progressFill.style.width =
+        `${percentage}%`;
+
+      progressText.textContent =
+        `${completedStages} / ${stages.length}`;
+    }
+
+    function restartQuiz() {
+      currentStage = 0;
+      completedStages = 0;
+
+      document
+        .querySelectorAll(".profile-card")
+        .forEach(card => {
+          card.classList.remove("active");
+          card.querySelector(".status")
+            .textContent = "LOCKED";
+        });
+
+      quizBox.style.display = "block";
+      finalScreen.style.display = "none";
+
+      loadStage();
+    }
+
+    loadStage();
+  </script>
+
+<script src="assets/final-token.js"></script>
+</body>
+  </html>
